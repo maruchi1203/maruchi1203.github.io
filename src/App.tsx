@@ -1,35 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { styled, createGlobalStyle } from "styled-components";
+import { Blog, Portfolio } from "./pages";
+
+const Wrapper = styled.div`
+  height: 100vh;
+  display: flex;
+  background-color: black;
+  justify-content: center;
+`;
+
+const GlobalStyles = createGlobalStyle`
+  @font-face {
+    font-family: 'Moneygraphy-Rounded';
+    src: url('./fonts/Moneygraphy-Rounded.eot');
+    src: url('./fonts/Moneygraphy-Rounded.eot?#iefix') format('embedded-opentype'),
+         url('./fonts/Moneygraphy-Rounded.woff2') format('woff2'),
+         url('./fonts/Moneygraphy-Rounded.woff') format('woff'),
+         url('./fonts/Moneygraphy-Rounded.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    background-color: black;
+    color: white;
+    font-family: 'Moneygraphy-Rounded', system-ui, -apple-system, BlinkMacSystemFont,
+                 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
+                 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+`;
 
 function App() {
-  const [count, setCount] = useState(0)
+  const router = createBrowserRouter([
+    {
+      path: "/",
+      element: <Blog />,
+    },
+    {
+      path: "/portfolio",
+      element: <Portfolio />,
+    },
+  ]);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Wrapper>
+      <GlobalStyles />
+      <RouterProvider router={router} />
+    </Wrapper>
+  );
 }
 
-export default App
+export default App;
