@@ -66,6 +66,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   const { username } = props;
 
   const [repos, setRepos] = useState<Repo[]>([]);
+  const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -81,7 +82,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         }
 
         const data: Repo[] = await res.json();
-        data.map(async (repo, index) => {
+        data.map(async (repo) => {
           const readme = await fetch(
             `https://api.github.com/repos/${username}/${repo.name}/contents/README.md`,
             {
@@ -101,11 +102,10 @@ function RepositoryContainer(props: RepositoryContainerProps) {
           const mdContentUTF8 = new TextDecoder().decode(bytes);
           const thumbnail = reg.exec(mdContentUTF8)?.toString();
 
-          data[index]["thumbnail"] = thumbnail ? thumbnail : "";
+          setThumbnails([...thumbnails, thumbnail ? thumbnail : ""]);
         });
 
         setRepos(data);
-        console.log("RepositoryContainer.tsx::=> ", data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -118,9 +118,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
     };
 
     fetchRepos();
-  }, [username]);
-
-  useEffect(() => {}, [repos]);
+  }, [username, thumbnails]);
 
   if (loading) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
@@ -139,11 +137,11 @@ function RepositoryContainer(props: RepositoryContainerProps) {
       </span>
       {/* <RepoArwLeftBtn />
       <RepoArwRightBtn /> */}
-      {repos.map((repo) => (
+      {repos.map((repo, index) => (
         <RepoCard key={repo.id}>
           <span>{repo.name}</span>
           <span>{repo.description}</span>
-          <img src={repo.thumbnail} width="100px" height="100px" />
+          <img src={thumbnails[index]} width="100px" height="100px" />
         </RepoCard>
       ))}
     </Wrapper>
