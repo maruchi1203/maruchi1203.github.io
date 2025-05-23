@@ -1,4 +1,5 @@
 import theme from "@styles/theme";
+import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -6,6 +7,7 @@ interface Userdata {
   login: string;
   name: string;
   bio: string;
+  email: string;
   avatar_url: string;
   html_url: string;
   company: string;
@@ -46,6 +48,35 @@ const ContextContainer = styled.span`
   margin: 0px 20px 0px 15px;
 `;
 
+const LinkContainer = styled.div`
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  grid-template-rows: 1fr 1fr;
+  align-items: center;
+  gap: 12px;
+
+  width: 100%;
+
+  padding-left: 20px;
+`;
+
+const LinkButton = styled.a`
+  gap: 10px;
+
+  width: 100%;
+
+  color: ${theme.lightColors.text};
+
+  :hover {
+    color: white;
+  }
+`;
+
+const LogoImg = styled.img`
+  width: auto;
+  height: inherit;
+`;
+
 function Profile(props: ProfileProps) {
   const { username } = props;
 
@@ -56,13 +87,16 @@ function Profile(props: ProfileProps) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await fetch(`https://api.github.com/users/${username}`);
-        if (!res.ok) {
-          throw new Error(`Error: ${res.status}`);
-        }
-        const data = await res.json();
-        setUserData(data);
-        console.log("Profile.tsx::=> ", data);
+        const token = import.meta.env.VITE_GITHUB_TOKEN;
+        const res = await axios(`https://api.github.com/users/${username}`, {
+          headers: {
+            Authorization: `token ${token}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+            Accept: "application/vnd.github.v3+json",
+          },
+        });
+
+        setUserData(res.data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -78,16 +112,16 @@ function Profile(props: ProfileProps) {
   }, [username]);
 
   if (loading) {
-    return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
+    return <Wrapper>🚚 로딩 중......</Wrapper>;
   }
   if (error) {
-    return <Wrapper>❓죄송합니다. 데이터에 오류가 있습니다.</Wrapper>;
+    return <Wrapper>❓데이터에 오류가 있습니다</Wrapper>;
   }
 
   return (
     <Wrapper>
       <BasicInfoContainer>
-        <Avatar src={userdata?.avatar_url} />
+        <Avatar src={userdata?.avatar_url} draggable="false" />
         <ContextContainer>
           <span className="w-full text-3xl font-bold">{userdata?.name}</span>
           <span className="w-full font-semibold text-gray-500">
@@ -98,6 +132,16 @@ function Profile(props: ProfileProps) {
           </span>
         </ContextContainer>
       </BasicInfoContainer>
+      <LinkContainer>
+        <LogoImg src="/src/images/gmail.png" />
+        <span className="selectable">{userdata?.email}</span>
+        <LogoImg src="/src/images/github.png" />
+        <LinkButton href={userdata?.html_url}>Github 바로가기</LinkButton>
+        <LogoImg src="/src/images/velog.png" />
+        <LinkButton href="https://velog.io/@_roadhobo">
+          Velog 바로가기
+        </LinkButton>
+      </LinkContainer>
     </Wrapper>
   );
 }

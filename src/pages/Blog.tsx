@@ -17,7 +17,7 @@ const Wrapper = styled.div`
   ${theme.flex.flexCol}
 
   width: 100vw;
-  height: 100vh;
+  height: 100%;
 
   background-color: ${theme.lightColors.background};
 `;
@@ -39,7 +39,6 @@ const TotalContainer = styled.div`
   }
 
   color: ${getThemeColor().text};
-  border-color: ${getThemeColor().border};
 `;
 
 const HeaderContainer = styled.div`
@@ -119,11 +118,14 @@ function Blog() {
         <TotalContainer>
           <HeaderContainer>
             <HeaderMenu>
-              <HeaderImageItem src="/src/images/typescript.png" />
-              <HeaderImageItem src="/src/images/react.png" />
-              <HeaderImageItem src="/src/images/vite.png" />
-              <HeaderImageItem src="/src/images/github.png" />
-              <HeaderImageItem src="/src/images/aws.png" />
+              <HeaderImageItem
+                src="/src/images/typescript.png"
+                draggable="false"
+              />
+              <HeaderImageItem src="/src/images/react.png" draggable="false" />
+              <HeaderImageItem src="/src/images/vite.png" draggable="false" />
+              <HeaderImageItem src="/src/images/github.png" draggable="false" />
+              <HeaderImageItem src="/src/images/aws.png" draggable="false" />
             </HeaderMenu>
           </HeaderContainer>
           <BodyContainer>

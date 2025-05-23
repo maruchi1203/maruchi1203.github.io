@@ -23,13 +23,21 @@ const GlobalStyles = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -ms-user-select:none;
+    user-select:none;
   }
   body {
-    background-color: black;
-    color: white;
     font-family: 'Moneygraphy-Rounded', system-ui, -apple-system, BlinkMacSystemFont,
                  'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell,
                  'Open Sans', 'Helvetica Neue', sans-serif;
+  }
+  .selectable {
+    -webkit-user-select:text;
+    -moz-user-select:text;
+    -ms-user-select:text;
+    user-select:text;
   }
 `;
 

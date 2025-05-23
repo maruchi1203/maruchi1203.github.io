@@ -8,6 +8,7 @@ interface Repo {
   html_url: string;
   description: string;
   private: boolean;
+  thumbnail: string;
 }
 
 interface RepositoryContainerProps {
@@ -16,13 +17,46 @@ interface RepositoryContainerProps {
 }
 
 const Wrapper = styled.div`
+  ${theme.flex.flexCol}
+  align-items: start;
   padding: 20px;
+  gap: 20px;
 
   width: 100%;
 
   border-radius: 5px;
 
   background-color: ${theme.lightColors.primary};
+`;
+
+const RepoCard = styled.div`
+  ${theme.flex.flexCol}
+  align-items: start;
+  position: absolute;
+  padding: 20px;
+
+  width: 400px;
+  height: 300px;
+
+  background-color: ${theme.lightColors.secondary};
+`;
+
+const RepoArwLeftBtn = styled.button`
+  width: 100px;
+  height: 100px;
+  border-right: 10px solid black;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transform: rotate(45deg);
+`;
+
+const RepoArwRightBtn = styled.button`
+  width: 100px;
+  height: 100px;
+  border-right: 10px solid black;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  transform: rotate(45deg);
 `;
 
 /**
@@ -41,11 +75,37 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         const res = await fetch(
           `https://api.github.com/users/${username}/repos`
         );
+
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);
         }
-        const data = await res.json();
+
+        const data: Repo[] = await res.json();
+        data.map(async (repo, index) => {
+          const readme = await fetch(
+            `https://api.github.com/repos/${username}/${repo.name}/contents/README.md`,
+            {
+              headers: { "X-GitHub-Api-Version": "2022-11-28" },
+            }
+          );
+
+          const mdContentBase64 = atob((await readme.json())["content"]);
+          const bytes = new Uint8Array(
+            [...mdContentBase64].map((char) => char.charCodeAt(0))
+          );
+
+          const reg = new RegExp(
+            `https:\\/\\/github\\.com\\/user-attachments\\/assets\\/[^\\s)]+(?=\\))`,
+            "g"
+          );
+          const mdContentUTF8 = new TextDecoder().decode(bytes);
+          const thumbnail = reg.exec(mdContentUTF8)?.toString();
+
+          data[index]["thumbnail"] = thumbnail ? thumbnail : "";
+        });
+
         setRepos(data);
+        console.log("RepositoryContainer.tsx::=> ", data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -60,6 +120,8 @@ function RepositoryContainer(props: RepositoryContainerProps) {
     fetchRepos();
   }, [username]);
 
+  useEffect(() => {}, [repos]);
+
   if (loading) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
   }
@@ -69,22 +131,21 @@ function RepositoryContainer(props: RepositoryContainerProps) {
 
   return (
     <Wrapper>
-      <span className="text-xl flex gap-[10px] items-center mb-[20px]">
+      <span className="text-xl flex gap-[10px] items-center">
         <div className="w-8 h-8">
           <img src="/src/images/github.png" width="100%" height="auto" />
         </div>
         Github 리포지토리 목록
       </span>
-      <ul>
-        {repos.map((repo) => (
-          <li key={repo.id}>
-            <a href={repo.html_url} target="_blank" rel="noopener noreferrer">
-              {repo.name}
-            </a>
-            {repo.description && <p>{repo.description}</p>}
-          </li>
-        ))}
-      </ul>
+      {/* <RepoArwLeftBtn />
+      <RepoArwRightBtn /> */}
+      {repos.map((repo) => (
+        <RepoCard key={repo.id}>
+          <span>{repo.name}</span>
+          <span>{repo.description}</span>
+          <img src={repo.thumbnail} width="100px" height="100px" />
+        </RepoCard>
+      ))}
     </Wrapper>
   );
 }

@@ -2,10 +2,9 @@ const darkThemeToggle = false;
 
 const lightColors = {
   primary: "white",
-  secondary: "gray",
+  secondary: "#EFEFEF",
   background: "#F0F0F0",
   text: "#444444",
-  border: "lightgray",
 };
 
 const darkColors = {
@@ -13,7 +12,6 @@ const darkColors = {
   secondary: "#6F7D7B",
   background: "#1D2C2C",
   text: "#9FA6A1",
-  border: "#3A4543",
 };
 
 const fontSize = {
@@ -40,12 +38,14 @@ const breakpoints = {
 const flex = {
   flexRow: `
     display: flex;
-    justify-contents: center;
+    justify-content: center;
+    border-radius: 5px;
   `,
   flexCol: `
     display: flex;
     flex-direction: column;
     align-items: center;
+    border-radius: 5px;
   `,
 };
 
