@@ -9,6 +9,7 @@ interface Repo {
   description: string;
   private: boolean;
   thumbnail: string;
+  md: string;
 }
 
 interface RepositoryContainerProps {
@@ -81,6 +82,15 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         }
 
         const data: Repo[] = await res.json();
+        for (let i = 0; i < data.length; i++) {
+          const url = `https://raw.githubusercontent.com/${username}/${data[i].name}/main/.github/thumbnail.png`;
+          const res = await fetch(url, { method: "HEAD" });
+          if (res.ok) {
+            data[i]["md"] = url;
+          } else {
+            data[i]["md"] = "";
+          }
+        }
 
         setRepos(data);
       } catch (err: unknown) {
@@ -96,14 +106,6 @@ function RepositoryContainer(props: RepositoryContainerProps) {
 
     fetchRepos();
   }, [username]);
-
-  const getThumbNail = async (repo: string) => {
-    const url = `https://raw.githubusercontent.com/${username}/${repo}/main/.github/thumbnail.png`;
-    const res = await fetch(url, { method: "HEAD" });
-    if (res.ok) return url;
-
-    return "";
-  };
 
   if (loading) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
@@ -123,15 +125,11 @@ function RepositoryContainer(props: RepositoryContainerProps) {
       <RepoCardContainer>
         {/* <RepoArwLeftBtn />
       <RepoArwRightBtn /> */}
-        {repos.map(async (repo) => (
+        {repos.map((repo) => (
           <RepoCard key={repo.id}>
             <span className="text-xl font-extrabold">{repo.name}</span>
             <span>{repo.description}</span>
-            <img
-              src={await getThumbNail(repo.name)}
-              width="auto"
-              height="200px"
-            />
+            {repo.md ? <img src={repo.md} width="auto" height="200px" /> : null}
           </RepoCard>
         ))}
       </RepoCardContainer>
