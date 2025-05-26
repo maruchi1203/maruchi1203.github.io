@@ -88,7 +88,7 @@ function Profile(props: ProfileProps) {
     const fetchUserData = async () => {
       try {
         const token = import.meta.env.VITE_GITHUB_TOKEN;
-        const res = await axios(`https://api.github.com/users/${username}`, {
+        const res = await axios(`/api/users/${username}`, {
           headers: {
             Authorization: `token ${token}`,
             "X-GitHub-Api-Version": "2022-11-28",

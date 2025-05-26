@@ -2,7 +2,7 @@ const darkThemeToggle = false;
 
 const lightColors = {
   primary: "white",
-  secondary: "#EFEFEF",
+  secondary: "#CCCCCC",
   background: "#F0F0F0",
   text: "#444444",
 };

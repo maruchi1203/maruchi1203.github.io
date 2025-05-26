@@ -125,7 +125,6 @@ function Blog() {
               <HeaderImageItem src="/src/images/react.png" draggable="false" />
               <HeaderImageItem src="/src/images/vite.png" draggable="false" />
               <HeaderImageItem src="/src/images/github.png" draggable="false" />
-              <HeaderImageItem src="/src/images/aws.png" draggable="false" />
             </HeaderMenu>
           </HeaderContainer>
           <BodyContainer>

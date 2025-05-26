@@ -29,16 +29,28 @@ const Wrapper = styled.div`
   background-color: ${theme.lightColors.primary};
 `;
 
+const RepoCardContainer = styled.div`
+  ${theme.flex.flexRow}
+  padding: 10px;
+
+  width: 100%;
+`;
+
 const RepoCard = styled.div`
   ${theme.flex.flexCol}
   align-items: start;
-  position: absolute;
   padding: 20px;
 
   width: 400px;
   height: 300px;
 
-  background-color: ${theme.lightColors.secondary};
+  background-color: ${theme.lightColors.primary};
+
+  box-shadow: 0 10px 10px ${theme.lightColors.secondary};
+
+  span {
+    height: 30px;
+  }
 `;
 
 const RepoArwLeftBtn = styled.button`
@@ -70,40 +82,25 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const token = import.meta.env.VITE_GITHUB_TOKEN;
+
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch(
-          `https://api.github.com/users/${username}/repos`
-        );
+        const res = await fetch(`/api/users/${username}/repos`, {
+          headers: {
+            Authorization: `token ${token}`,
+            "X-GitHub-Api-Version": "2022-11-28",
+            Accept: "application/vnd.github.v3+json",
+          },
+        });
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);
         }
 
         const data: Repo[] = await res.json();
-        data.map(async (repo) => {
-          const readme = await fetch(
-            `https://api.github.com/repos/${username}/${repo.name}/contents/README.md`,
-            {
-              headers: { "X-GitHub-Api-Version": "2022-11-28" },
-            }
-          );
-
-          const mdContentBase64 = atob((await readme.json())["content"]);
-          const bytes = new Uint8Array(
-            [...mdContentBase64].map((char) => char.charCodeAt(0))
-          );
-
-          const reg = new RegExp(
-            `https:\\/\\/github\\.com\\/user-attachments\\/assets\\/[^\\s)]+(?=\\))`,
-            "g"
-          );
-          const mdContentUTF8 = new TextDecoder().decode(bytes);
-          const thumbnail = reg.exec(mdContentUTF8)?.toString();
-
-          setThumbnails([...thumbnails, thumbnail ? thumbnail : ""]);
-        });
+        const tnList: string[] = [];
 
         setRepos(data);
       } catch (err: unknown) {
@@ -118,7 +115,15 @@ function RepositoryContainer(props: RepositoryContainerProps) {
     };
 
     fetchRepos();
-  }, [username, thumbnails]);
+  }, [username]);
+
+  const getThumbNail = async (repo: string) => {
+    const url = `https://raw.githubusercontent.com/${username}/${repo}/main/.github/thumbnail.png`;
+    const res = await fetch(url, { method: "HEAD" });
+    if (res.ok) return url;
+
+    return "";
+  };
 
   if (loading) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
@@ -135,15 +140,21 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         </div>
         Github 리포지토리 목록
       </span>
-      {/* <RepoArwLeftBtn />
+      <RepoCardContainer>
+        {/* <RepoArwLeftBtn />
       <RepoArwRightBtn /> */}
-      {repos.map((repo, index) => (
-        <RepoCard key={repo.id}>
-          <span>{repo.name}</span>
-          <span>{repo.description}</span>
-          <img src={thumbnails[index]} width="100px" height="100px" />
-        </RepoCard>
-      ))}
+        {repos.map(async (repo) => (
+          <RepoCard key={repo.id}>
+            <span className="text-xl font-extrabold">{repo.name}</span>
+            <span>{repo.description}</span>
+            <img
+              src={await getThumbNail(repo.name)}
+              width="auto"
+              height="200px"
+            />
+          </RepoCard>
+        ))}
+      </RepoCardContainer>
     </Wrapper>
   );
 }
