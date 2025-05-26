@@ -53,24 +53,6 @@ const RepoCard = styled.div`
   }
 `;
 
-const RepoArwLeftBtn = styled.button`
-  width: 100px;
-  height: 100px;
-  border-right: 10px solid black;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  transform: rotate(45deg);
-`;
-
-const RepoArwRightBtn = styled.button`
-  width: 100px;
-  height: 100px;
-  border-right: 10px solid black;
-  border-top: 10px solid transparent;
-  border-bottom: 10px solid transparent;
-  transform: rotate(45deg);
-`;
-
 /**
  * 리포지토리
  */
@@ -78,7 +60,6 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   const { username } = props;
 
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [thumbnails, setThumbnails] = useState<string[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -100,7 +81,6 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         }
 
         const data: Repo[] = await res.json();
-        const tnList: string[] = [];
 
         setRepos(data);
       } catch (err: unknown) {
