@@ -50,6 +50,31 @@ const ContextContainer = styled.span`
   span {
     flex-basis: max-content;
   }
+
+  .name {
+    width: 100%;
+
+    font-size: larger;
+    font-weight: bolder;
+  }
+
+  .login {
+    width: max-content;
+
+    font-size: medium;
+    font-weight: bold;
+
+    color: ${theme.lightColors.secondary};
+  }
+
+  .bio {
+    width: max-content;
+
+    font-size: medium;
+    font-weight: bold;
+
+    color: ${theme.lightColors.secondary};
+  }
 `;
 
 const LinkContainer = styled.div`
@@ -77,7 +102,7 @@ const LinkButton = styled.a`
 `;
 
 const LogoImg = styled.img`
-  width: auto;
+  width: 30px;
   height: inherit;
 `;
 
@@ -129,13 +154,9 @@ function Profile(props: ProfileProps) {
       <BasicInfoContainer>
         <Avatar src={userdata?.avatar_url} draggable="false" />
         <ContextContainer>
-          <span className="w-full text-3xl font-bold">{userdata?.name}</span>
-          <span className="w-full font-semibold text-gray-500">
-            {userdata?.login}
-          </span>
-          <span className="w-full text-center font-extrabold text-gray-500">
-            {userdata?.bio}
-          </span>
+          <span className="name">{userdata?.name}</span>
+          <span className="login">{userdata?.login}</span>
+          <span className="bio">{userdata?.bio}</span>
         </ContextContainer>
       </BasicInfoContainer>
       <LinkContainer>

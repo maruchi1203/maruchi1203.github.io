@@ -29,6 +29,12 @@ const Wrapper = styled.div`
   border-radius: 5px;
 
   background-color: ${theme.lightColors.primary};
+
+  #repo {
+    ${theme.flex.flexRow}
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 const RepoTitleContainer = styled.div`
@@ -223,7 +229,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
         </div>
         Github 리포지토리 목록
       </RepoTitleContainer>
-      <div className="w-full flex items-center">
+      <div id="repo">
         <IconButtonContainer
           onClick={leftIconOnClick}
           $visible={leftIconVisibility}

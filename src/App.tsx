@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { styled, createGlobalStyle } from "styled-components";
 import { Blog, Portfolio } from "./pages";
+import reset from "styled-reset";
 
 const Wrapper = styled.div`
   height: auto;
@@ -10,6 +11,8 @@ const Wrapper = styled.div`
 `;
 
 const GlobalStyles = createGlobalStyle`
+  ${reset}
+
   @font-face {
     font-family: 'Moneygraphy-Rounded';
     src: url('./fonts/Moneygraphy-Rounded.eot');

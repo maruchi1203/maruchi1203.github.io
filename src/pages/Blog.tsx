@@ -21,6 +21,11 @@ const Wrapper = styled.div`
   height: auto;
 
   background-color: ${theme.lightColors.background};
+
+  a {
+    text-decoration: none;
+    color: ${theme.lightColors.text};
+  }
 `;
 
 const TotalContainer = styled.div`

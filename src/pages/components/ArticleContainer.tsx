@@ -55,7 +55,7 @@ const ArtcCard = styled.div`
   ${theme.flex.flexCol}
   align-items: start;
 
-  width: 100%;
+  width: auto;
   height: fit-content;
 
   background-color: ${theme.lightColors.primary};
@@ -70,15 +70,15 @@ const ArtcCard = styled.div`
     ${theme.flex.flexCol}
     align-items: start;
     padding: 20px;
+    gap: 20px;
 
     width: 100%;
     height: 100%;
   }
 
   span {
-    display: inline-block;
+    display: block;
     width: 100%;
-    height: 30px;
   }
 
   .title {
@@ -170,7 +170,7 @@ function ArticleContainer(props: ArticleContainerProps) {
             <a href={article.link}>
               <span className="title">{article.title}</span>
               <span className="date">{article.pubDate.toDateString()}</span>
-              <img src={article.thumbnail} width="auto" />
+              <img src={article.thumbnail} width="100%" />
             </a>
           </ArtcCard>
         ))}
