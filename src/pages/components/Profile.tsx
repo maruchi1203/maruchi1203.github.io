@@ -1,5 +1,4 @@
 import theme from "@styles/theme";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -93,7 +92,7 @@ function Profile(props: ProfileProps) {
     const fetchUserData = async () => {
       try {
         const token = import.meta.env.VITE_GITHUB_TOKEN;
-        const res = await axios(`/github/users/${username}`, {
+        const res = await fetch(`/github/users/${username}`, {
           headers: {
             Authorization: `token ${token}`,
             "X-GitHub-Api-Version": "2022-11-28",
@@ -101,7 +100,9 @@ function Profile(props: ProfileProps) {
           },
         });
 
-        setUserData(res.data);
+        const data = await res.json();
+
+        setUserData(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
