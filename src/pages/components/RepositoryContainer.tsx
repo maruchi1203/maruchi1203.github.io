@@ -73,7 +73,6 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
   display: ${(props) =>
     Math.abs(props.$renderedindex) <= 2 ? "block" : "none"};
   z-index: ${(props) => `${100 - Math.abs(props.$renderedindex)}`};
-  scale: ${(props) => `${1 - 0.1 * Math.abs(props.$renderedindex)}`};
 
   position: absolute;
   align-items: start;
@@ -82,9 +81,15 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
   height: 350px;
 
   top: 50%;
-  left: ${(props) => `${50 + 10 * props.$renderedindex}%`};
-  transform: translate(-50%, -50%);
-  transition: transform 4s scale 4s z-index 4s;
+  left: 50%;
+  transform: ${(props) => {
+    const idx = props.$renderedindex; // 가운데 카드 인덱스 - 해당 카드 인덱스
+    const gap = 15; // 카드간의 좌우 이동값
+    const offsetPercent = idx * gap;
+    const scale = 1 - 0.1 * Math.abs(idx);
+
+    return `translate(-50%, -50%) translateX(${offsetPercent}%) scale(${scale})`;
+  }};
 
   background-color: ${theme.lightColors.primary};
 
@@ -120,11 +125,11 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
 function RepositoryContainer(props: RepositoryContainerProps) {
   const { username } = props;
 
-  const [leftIconVisibility, SetLeftIconVisibility] = useState(false);
-  const [rightIconVisibility, SetRightIconVisibility] = useState(true);
+  const [leftIconVisibility, setLeftIconVisibility] = useState(false);
+  const [rightIconVisibility, setRightIconVisibility] = useState(true);
 
   const [repos, setRepos] = useState<Repo[]>([]);
-  const [selectedRepo, SetSelectedRepo] = useState<number>(0);
+  const [selectedRepo, setSelectedRepo] = useState<number>(0);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -138,7 +143,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch(`/api/users/${username}/repos`, {
+        const res = await fetch(`/github/users/${username}/repos`, {
           headers: {
             Authorization: `token ${token}`,
             "X-GitHub-Api-Version": "2022-11-28",
@@ -183,14 +188,14 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   }, [repos, selectedRepo]);
 
   const leftIconOnClick = () => {
-    SetSelectedRepo((prev) => {
+    setSelectedRepo((prev) => {
       if (selectedRepo > 0) return selectedRepo - 1;
       return prev;
     });
   };
 
   const rightIconOnClick = () => {
-    SetSelectedRepo((prev) => {
+    setSelectedRepo((prev) => {
       if (selectedRepo < repos.length - 1) return selectedRepo + 1;
       return prev;
     });
@@ -198,8 +203,8 @@ function RepositoryContainer(props: RepositoryContainerProps) {
 
   const changeRepoCard = () => {
     if (leftArrow && rightArrow) {
-      SetLeftIconVisibility(selectedRepo > 0 ? true : false);
-      SetRightIconVisibility(selectedRepo < repos.length - 1 ? true : false);
+      setLeftIconVisibility(selectedRepo > 0 ? true : false);
+      setRightIconVisibility(selectedRepo < repos.length - 1 ? true : false);
     }
   };
 

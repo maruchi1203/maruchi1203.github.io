@@ -15,10 +15,15 @@ export default defineConfig({
   },
   server: {
     proxy: {
-      "/api": {
+      "/github": {
         target: "https://api.github.com", // API 서버의 주소
         changeOrigin: true, // 요청의 origin을 target에 맞게 수정
-        rewrite: (path) => path.replace(/^\/api/, ""), // 필요시 경로 변경
+        rewrite: (path) => path.replace(/^\/github/, ""), // 필요시 경로 변경
+      },
+      "/velog": {
+        target: "https://v2.velog.io/rss", // API 서버의 주소
+        changeOrigin: true, // 요청의 origin을 target에 맞게 수정
+        rewrite: (path) => path.replace(/^\/velog/, ""), // 필요시 경로 변경
       },
     },
   },

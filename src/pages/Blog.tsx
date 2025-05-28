@@ -15,9 +15,10 @@ const getThemeColor = () => {
 
 const Wrapper = styled.div`
   ${theme.flex.flexCol}
+  border-radius: 0px;
 
-  width: 100vw;
-  height: 100%;
+  width: 100%;
+  height: auto;
 
   background-color: ${theme.lightColors.background};
 `;
@@ -26,6 +27,7 @@ const TotalContainer = styled.div`
   ${theme.flex.flexCol}
   ${theme.gap}
   margin-top: 20px;
+  margin-bottom: 20px;
 
   width: ${theme.breakpoints.desktop};
   @media screen and (max-width: ${theme.breakpoints.desktop}) {
@@ -136,7 +138,7 @@ function Blog() {
             </NavContainer>
             <SectionContainer>
               <RepositoryContainer username={username} />
-              <ArticleContainer />
+              <ArticleContainer username={"_roadhobo"} />
             </SectionContainer>
           </BodyContainer>
           <FooterContainer>

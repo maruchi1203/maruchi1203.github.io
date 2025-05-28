@@ -30,6 +30,7 @@ const Wrapper = styled.div`
 
 const BasicInfoContainer = styled.div`
   ${theme.flex.flexRow}
+  flex-basis: max-content;
   padding: 10px;
 `;
 
@@ -46,6 +47,10 @@ const ContextContainer = styled.span`
   width: 100%;
 
   margin: 0px 20px 0px 15px;
+
+  span {
+    flex-basis: max-content;
+  }
 `;
 
 const LinkContainer = styled.div`
@@ -88,7 +93,7 @@ function Profile(props: ProfileProps) {
     const fetchUserData = async () => {
       try {
         const token = import.meta.env.VITE_GITHUB_TOKEN;
-        const res = await axios(`/api/users/${username}`, {
+        const res = await axios(`/github/users/${username}`, {
           headers: {
             Authorization: `token ${token}`,
             "X-GitHub-Api-Version": "2022-11-28",

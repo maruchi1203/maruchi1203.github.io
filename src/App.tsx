@@ -3,7 +3,7 @@ import { styled, createGlobalStyle } from "styled-components";
 import { Blog, Portfolio } from "./pages";
 
 const Wrapper = styled.div`
-  height: 100vh;
+  height: auto;
   display: flex;
   background-color: black;
   justify-content: center;
