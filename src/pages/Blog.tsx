@@ -1,9 +1,9 @@
 import { styled, ThemeProvider } from "styled-components";
 import theme from "../styles/theme";
 import { useEffect, useState } from "react";
-import RepositoryContainer from "./components/RepositoryContainer";
-import Profile from "./components/Profile";
-import ArticleContainer from "./components/ArticleContainer";
+import RepositoryContainer from "./components/RepositoryContainer.tsx";
+import Profile from "./components/Profile.tsx";
+import ArticleContainer from "./components/ArticleContainer.tsx";
 
 const getThemeColor = () => {
   if (theme.darkThemeToggle) {
