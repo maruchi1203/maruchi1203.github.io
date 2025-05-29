@@ -4,13 +4,15 @@ import path from "path";
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: "/",
+  base: "/maruchi1203.github.io/",
+  build: {
+    outDir: "dist",
+  },
   plugins: [react()],
   resolve: {
     alias: {
-      "@src": path.resolve(__dirname, "./src"),
-      "@styles": path.resolve(__dirname, "./src/styles"),
-      "@images": path.resolve(__dirname, "./src/images"),
+      "@src": path.resolve(__dirname, "./src/frontend"),
+      "@styles": path.resolve(__dirname, "./src/frontend/styles"),
     },
   },
   server: {

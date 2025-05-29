@@ -2,7 +2,7 @@ import theme from "@styles/theme";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
-interface Userdata {
+interface Profile {
   login: string;
   name: string;
   bio: string;
@@ -14,7 +14,8 @@ interface Userdata {
 }
 
 interface ProfileProps {
-  username: string;
+  githubName: string;
+  velogName: string;
   [key: string]: unknown;
 }
 
@@ -107,27 +108,26 @@ const LogoImg = styled.img`
 `;
 
 function Profile(props: ProfileProps) {
-  const { username } = props;
+  const { githubName, velogName } = props;
 
-  const [userdata, setUserData] = useState<Userdata>();
+  const [profile, setProfile] = useState<Profile>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchProfile = async () => {
       try {
-        const token = import.meta.env.VITE_GITHUB_TOKEN;
-        const res = await fetch(`/github/users/${username}`, {
-          headers: {
-            Authorization: `token ${token}`,
-            "X-GitHub-Api-Version": "2022-11-28",
-            Accept: "application/vnd.github.v3+json",
-          },
-        });
+        const repoUrl = `${
+          import.meta.env.VITE_API_BASE_URL
+        }github/${githubName}/profile`;
+        const res = await fetch(repoUrl);
+
+        if (!res.ok) {
+          throw new Error(`Error: ${res.status}`);
+        }
 
         const data = await res.json();
-
-        setUserData(data);
+        setProfile(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -139,33 +139,33 @@ function Profile(props: ProfileProps) {
       }
     };
 
-    fetchUserData();
-  }, [username]);
+    fetchProfile();
+  }, [githubName]);
 
   if (loading) {
     return <Wrapper>🚚 로딩 중......</Wrapper>;
   }
   if (error) {
-    return <Wrapper>❓데이터에 오류가 있습니다</Wrapper>;
+    return <Wrapper>❓프로필 데이터에 오류가 있습니다 {error} </Wrapper>;
   }
 
   return (
     <Wrapper>
       <BasicInfoContainer>
-        <Avatar src={userdata?.avatar_url} draggable="false" />
+        <Avatar src={profile?.avatar_url} draggable="false" />
         <ContextContainer>
-          <span className="name">{userdata?.name}</span>
-          <span className="login">{userdata?.login}</span>
-          <span className="bio">{userdata?.bio}</span>
+          <span className="name">{profile?.name}</span>
+          <span className="login">{profile?.login}</span>
+          <span className="bio">{profile?.bio}</span>
         </ContextContainer>
       </BasicInfoContainer>
       <LinkContainer>
-        <LogoImg src="/src/images/gmail.png" />
-        <span className="selectable">{userdata?.email}</span>
-        <LogoImg src="/src/images/github.png" />
-        <LinkButton href={userdata?.html_url}>Github 바로가기</LinkButton>
-        <LogoImg src="/src/images/velog.png" />
-        <LinkButton href="https://velog.io/@_roadhobo">
+        <LogoImg src={`${import.meta.env.BASE_URL}images/gmail.png`} />
+        <span className="selectable">{profile?.email}</span>
+        <LogoImg src={`${import.meta.env.BASE_URL}images/github.png`} />
+        <LinkButton href={profile?.html_url}>Github 바로가기</LinkButton>
+        <LogoImg src={`${import.meta.env.BASE_URL}images/velog.png`} />
+        <LinkButton href={`https://velog.io/@${velogName}`}>
           Velog 바로가기
         </LinkButton>
       </LinkContainer>

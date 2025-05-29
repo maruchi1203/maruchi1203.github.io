@@ -12,6 +12,7 @@ interface Article {
 }
 
 interface ArticleContainerProps {
+  velogName: string;
   [key: string]: unknown;
 }
 
@@ -94,7 +95,7 @@ const ArtcCard = styled.div`
  * 리포지토리
  */
 function ArticleContainer(props: ArticleContainerProps) {
-  const { username } = props;
+  const { velogName } = props;
 
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
@@ -103,7 +104,10 @@ function ArticleContainer(props: ArticleContainerProps) {
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch(`velog/${username}`);
+        const res = await fetch(
+          `${import.meta.env.VITE_API_BASE_URL}velog/${velogName}`
+        );
+
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);
         }
@@ -130,7 +134,6 @@ function ArticleContainer(props: ArticleContainerProps) {
         });
 
         setArticles(articles);
-        console.log("ArticleContainer.tsx::=> ", articles);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -143,7 +146,7 @@ function ArticleContainer(props: ArticleContainerProps) {
     };
 
     fetchRepos();
-  }, [username]);
+  }, [velogName]);
 
   if (loading) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
@@ -160,7 +163,11 @@ function ArticleContainer(props: ArticleContainerProps) {
     <Wrapper>
       <ArtcTitleContainer>
         <div className="logo">
-          <img src="/src/images/velog.png" width="100%" height="auto" />
+          <img
+            src={`${import.meta.env.BASE_URL}images/velog.png`}
+            width="100%"
+            height="auto"
+          />
         </div>
         Velog 글 목록
       </ArtcTitleContainer>

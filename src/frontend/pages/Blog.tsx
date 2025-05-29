@@ -110,7 +110,9 @@ const FooterContainer = styled.div`
 `;
 
 function Blog() {
-  const username = "maruchi1203";
+  const githubName = "maruchi1203";
+  const velogName = "_roadhobo";
+
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -126,24 +128,33 @@ function Blog() {
           <HeaderContainer>
             <HeaderMenu>
               <HeaderImageItem
-                src="/src/images/typescript.png"
+                src={`${import.meta.env.BASE_URL}images/typescript.png`}
                 draggable="false"
               />
-              <HeaderImageItem src="/src/images/react.png" draggable="false" />
-              <HeaderImageItem src="/src/images/vite.png" draggable="false" />
-              <HeaderImageItem src="/src/images/github.png" draggable="false" />
+              <HeaderImageItem
+                src={`${import.meta.env.BASE_URL}images/react.png`}
+                draggable="false"
+              />
+              <HeaderImageItem
+                src={`${import.meta.env.BASE_URL}images/vite.png`}
+                draggable="false"
+              />
+              <HeaderImageItem
+                src={`${import.meta.env.BASE_URL}images/github.png`}
+                draggable="false"
+              />
             </HeaderMenu>
           </HeaderContainer>
           <BodyContainer>
             <NavContainer>
-              <Profile username={username} />
+              <Profile githubName={githubName} velogName={velogName} />
               <NavMenu>
                 <NavMenuItem></NavMenuItem>
               </NavMenu>
             </NavContainer>
             <SectionContainer>
-              <RepositoryContainer username={username} />
-              <ArticleContainer username={"_roadhobo"} />
+              <RepositoryContainer githubName={githubName} />
+              <ArticleContainer velogName={velogName} />
             </SectionContainer>
           </BodyContainer>
           <FooterContainer>

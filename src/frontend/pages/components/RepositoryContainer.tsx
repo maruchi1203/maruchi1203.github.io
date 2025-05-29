@@ -1,4 +1,4 @@
-import theme from "@src/styles/theme";
+import theme from "@styles/theme";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -14,7 +14,7 @@ interface Repo {
 }
 
 interface RepositoryContainerProps {
-  username: string;
+  githubName: string;
   [key: string]: unknown;
 }
 
@@ -129,7 +129,7 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
  * 리포지토리
  */
 function RepositoryContainer(props: RepositoryContainerProps) {
-  const { username } = props;
+  const { githubName } = props;
 
   const [leftIconVisibility, setLeftIconVisibility] = useState(false);
   const [rightIconVisibility, setRightIconVisibility] = useState(true);
@@ -144,18 +144,13 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   const leftArrow = document.getElementById("left-arrow");
   const rightArrow = document.getElementById("right-arrow");
 
-  const token = import.meta.env.VITE_GITHUB_TOKEN;
-
   useEffect(() => {
     const fetchRepos = async () => {
       try {
-        const res = await fetch(`/github/users/${username}/repos`, {
-          headers: {
-            Authorization: `token ${token}`,
-            "X-GitHub-Api-Version": "2022-11-28",
-            Accept: "application/vnd.github.v3+json",
-          },
-        });
+        const repoUrl = `${
+          import.meta.env.VITE_API_BASE_URL
+        }github/${githubName}/repos`;
+        const res = await fetch(repoUrl);
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);
@@ -163,10 +158,10 @@ function RepositoryContainer(props: RepositoryContainerProps) {
 
         const data: Repo[] = await res.json();
         for (let i = 0; i < data.length; i++) {
-          const url = `https://raw.githubusercontent.com/${username}/${data[i].name}/main/.github/thumbnail.png`;
-          const res = await fetch(url, { method: "HEAD" });
+          const thumbnailUrl = `https://raw.githubusercontent.com/${githubName}/${data[i]["name"]}/main/.github/thumbnail.png`;
+          const res = await fetch(thumbnailUrl, { method: "HEAD" });
           if (res.ok) {
-            data[i]["md"] = url;
+            data[i]["md"] = thumbnailUrl;
           } else {
             data[i]["md"] = "";
           }
@@ -185,12 +180,13 @@ function RepositoryContainer(props: RepositoryContainerProps) {
     };
 
     fetchRepos();
-  }, [username]);
+  }, [githubName]);
 
   useEffect(() => {
     requestAnimationFrame(() => {
       changeRepoCard();
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [repos, selectedRepo]);
 
   const leftIconOnClick = () => {
@@ -218,14 +214,22 @@ function RepositoryContainer(props: RepositoryContainerProps) {
     return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
   }
   if (error) {
-    return <Wrapper>❓죄송합니다. 해당 리포지토리를 찾을 수 없습니다.</Wrapper>;
+    return (
+      <Wrapper>
+        ❓죄송합니다. 해당 리포지토리를 찾을 수 없습니다 {error}
+      </Wrapper>
+    );
   }
 
   return (
     <Wrapper>
       <RepoTitleContainer>
         <div className="logo">
-          <img src="/src/images/github.png" width="100%" height="auto" />
+          <img
+            src={`${import.meta.env.BASE_URL}images/github.png`}
+            width="100%"
+            height="auto"
+          />
         </div>
         Github 리포지토리 목록
       </RepoTitleContainer>
