@@ -7,6 +7,13 @@ const PORT = process.env.PORT || 4000;
 
 app.use(cors());
 app.use(express.static(path.join(__dirname, "../../dist")));
+app.use((req: express.Request, res: express.Response, next: NextFunction) => {
+  if (req.path.startsWith("http")) {
+    res.status(400).send("비정상 경로 요청입니다.");
+    return;
+  }
+  next();
+});
 
 app.get(
   "/github/:name/profile",
@@ -14,7 +21,7 @@ app.get(
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
 
-    if (!name || name.trim() === "") {
+    if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
       res.status(400).json({ error: "github name 파라미터가 필요합니다." });
       return;
     }
@@ -43,7 +50,7 @@ app.get(
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
 
-    if (!name || name.trim() === "") {
+    if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
       res.status(400).json({ error: "github name 파라미터가 필요합니다." });
       return;
     }
@@ -72,7 +79,7 @@ app.get(
 app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   const { name } = req.params;
 
-  if (!name || name.trim() === "") {
+  if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
     res.status(400).json({ error: "velog name 파라미터가 필요합니다." });
     return;
   }
@@ -88,16 +95,9 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   }
 });
 
-app.get(
-  "*",
-  (req: express.Request, res: express.Response, next: NextFunction) => {
-    if (req.url.startsWith("http")) {
-      res.status(400).send("잘못된 요청 형식입니다.");
-      return;
-    }
-    next();
-  }
-);
+app.get("*", (_, res: express.Response) => {
+  res.sendFile(path.join(__dirname, "../../dist/index.html"));
+});
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
