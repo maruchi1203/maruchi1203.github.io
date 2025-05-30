@@ -120,6 +120,7 @@ function Profile(props: ProfileProps) {
         const repoUrl = `${
           import.meta.env.VITE_API_BASE_URL
         }/github/${githubName}/profile`;
+        console.log("Profile.tsx::=> ", repoUrl);
         const res = await fetch(repoUrl);
 
         if (!res.ok) {

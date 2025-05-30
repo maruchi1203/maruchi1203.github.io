@@ -15,6 +15,7 @@ const whitelist = [
 app.use(
   cors({
     origin: whitelist,
+    credentials: false,
   })
 );
 
