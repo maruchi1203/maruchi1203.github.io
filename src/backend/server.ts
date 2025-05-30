@@ -1,4 +1,4 @@
-import express from "express";
+import express, { NextFunction } from "express";
 import cors from "cors";
 import path from "path";
 
@@ -13,6 +13,11 @@ app.get(
   async (req: express.Request, res: express.Response) => {
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
+
+    if (!name || name.trim() === "") {
+      res.status(400).json({ error: "github name 파라미터가 필요합니다." });
+      return;
+    }
 
     try {
       const response = await fetch(`https://api.github.com/users/${name}`, {
@@ -38,6 +43,11 @@ app.get(
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
 
+    if (!name || name.trim() === "") {
+      res.status(400).json({ error: "github name 파라미터가 필요합니다." });
+      return;
+    }
+
     try {
       const response = await fetch(
         `https://api.github.com/users/${name}/repos`,
@@ -62,6 +72,11 @@ app.get(
 app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   const { name } = req.params;
 
+  if (!name || name.trim() === "") {
+    res.status(400).json({ error: "velog name 파라미터가 필요합니다." });
+    return;
+  }
+
   try {
     const response = await fetch(`https://v2.velog.io/rss/${name}`);
 
@@ -69,13 +84,20 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.json(data);
   } catch (err: unknown) {
-    res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+    res.status(500).json({ error: `Velog API 호출 실패 ${err}` });
   }
 });
 
-app.get("*", (_, res: express.Response) => {
-  res.sendFile(path.join(__dirname, "../../dist/index.html"));
-});
+app.get(
+  "*",
+  (req: express.Request, res: express.Response, next: NextFunction) => {
+    if (req.url.startsWith("http")) {
+      res.status(400).send("잘못된 요청 형식입니다.");
+      return;
+    }
+    next();
+  }
+);
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
