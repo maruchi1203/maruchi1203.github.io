@@ -3,7 +3,7 @@ import cors from "cors";
 import path from "path";
 
 const app = express();
-const distPath = path.resolve(__dirname, "dist");
+const distPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 4000;
 
 app.use(
