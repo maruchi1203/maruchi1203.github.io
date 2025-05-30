@@ -44,6 +44,7 @@ app.get(
           Authorization: `token ${token}`,
           Accept: "application/vnd.github.v3+json",
           "X-GitHub-Api-Version": "2022-11-28",
+          "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
         },
       });
 
@@ -74,6 +75,7 @@ app.get(
             Authorization: `token ${token}`,
             Accept: "application/vnd.github.v3+json",
             "X-GitHub-Api-Version": "2022-11-28",
+            "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
           },
         }
       );
@@ -95,7 +97,12 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   }
 
   try {
-    const response = await fetch(`https://v2.velog.io/rss/${name}`);
+    const response = await fetch(`https://v2.velog.io/rss/${name}`, {
+      headers: {
+        Accept: "text/xml",
+        "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
+      },
+    });
 
     const data = await response.text();
     res.json(data);
