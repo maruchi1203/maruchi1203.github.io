@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 4000;
 app.use(
   cors({
     origin: "https://maruchi1203.github.io", // 정확하게 GitHub Pages 도메인만 허용
-    credentials: true,
+    credentials: false,
   })
 );
 app.use(express.static(distPath));
