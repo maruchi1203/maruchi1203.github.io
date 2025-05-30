@@ -97,6 +97,9 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   try {
     const response = await fetch(`https://v2.velog.io/rss/${name}`);
     const data = await response.text();
+
+    res.set("Access-Control-Allow-Origin", "https://maruchi1203.github.io");
+
     return res.type("text/xml").send(data);
   } catch (err: unknown) {
     res.status(500).json({ error: `Velog API 호출 실패 ${err}` });

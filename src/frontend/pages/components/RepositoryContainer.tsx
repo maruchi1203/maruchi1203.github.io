@@ -149,7 +149,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
       try {
         const repoUrl = `${
           import.meta.env.VITE_API_BASE_URL
-        }github/${githubName}/repos`;
+        }/github/${githubName}/repos`;
         const res = await fetch(repoUrl);
 
         if (!res.ok) {

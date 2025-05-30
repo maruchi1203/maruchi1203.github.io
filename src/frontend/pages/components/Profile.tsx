@@ -119,7 +119,7 @@ function Profile(props: ProfileProps) {
       try {
         const repoUrl = `${
           import.meta.env.VITE_API_BASE_URL
-        }github/${githubName}/profile`;
+        }/github/${githubName}/profile`;
         const res = await fetch(repoUrl);
 
         if (!res.ok) {

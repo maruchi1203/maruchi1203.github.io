@@ -105,7 +105,7 @@ function ArticleContainer(props: ArticleContainerProps) {
     const fetchRepos = async () => {
       try {
         const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}velog/${velogName}`
+          `${import.meta.env.VITE_API_BASE_URL}/velog/${velogName}`
         );
 
         if (!res.ok) {
