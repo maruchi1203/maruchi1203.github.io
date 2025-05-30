@@ -6,16 +6,23 @@ const app = express();
 const distPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 4000;
 
-app.use(
-  cors({
-    origin: [
-      "https://maruchi1203.github.io",
-      "http://localhost:4173",
-      "http://localhost:5173",
-    ], // 정확하게 GitHub Pages 도메인만 허용
-    credentials: false,
-  })
-);
+const whitelist = [
+  "https://maruchi1203.github.io",
+  "http://localhost:4173",
+  "http://localhost:5173",
+];
+const corsOptions = {
+  origin: function (origin: any, callback: any) {
+    if (whitelist.indexOf(origin) !== -1) {
+      // 만일 whitelist 배열에 origin인자가 있을 경우
+      callback(null, true); // cors 허용
+    } else {
+      callback(new Error("Not Allowed Origin!")); // cors 비허용
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 
 app.use(express.static(distPath));
 
