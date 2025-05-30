@@ -33,7 +33,7 @@ app.get(
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
 
-    if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
+    if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
       res.status(400).json({ error: "github name 파라미터가 필요합니다." });
       return;
     }
@@ -44,7 +44,6 @@ app.get(
           Authorization: `token ${token}`,
           Accept: "application/vnd.github.v3+json",
           "X-GitHub-Api-Version": "2022-11-28",
-          "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
         },
       });
 
@@ -62,7 +61,7 @@ app.get(
     const { name } = req.params;
     const token = process.env.GITHUB_TOKEN;
 
-    if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
+    if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
       res.status(400).json({ error: "github name 파라미터가 필요합니다." });
       return;
     }
@@ -75,7 +74,6 @@ app.get(
             Authorization: `token ${token}`,
             Accept: "application/vnd.github.v3+json",
             "X-GitHub-Api-Version": "2022-11-28",
-            "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
           },
         }
       );
@@ -91,21 +89,15 @@ app.get(
 app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   const { name } = req.params;
 
-  if (!name || name.trim() === "" || !/^[a-zA-Z0-9-_]+$/.test(name)) {
+  if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
     res.status(400).json({ error: "velog name 파라미터가 필요합니다." });
     return;
   }
 
   try {
-    const response = await fetch(`https://v2.velog.io/rss/${name}`, {
-      headers: {
-        Accept: "text/xml",
-        "Access-Control-Allow-Origin": `${process.env.VITE_API_BASE_URL}`,
-      },
-    });
-
+    const response = await fetch(`https://v2.velog.io/rss/${name}`);
     const data = await response.text();
-    res.json(data);
+    return res.type("text/xml").send(data);
   } catch (err: unknown) {
     res.status(500).json({ error: `Velog API 호출 실패 ${err}` });
   }
