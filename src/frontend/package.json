@@ -7,8 +7,7 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "preview:all": "npm run build && npm run preview",
+    "preview": "npm run build && vite preview",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d ../backend/dist -b gh-pages --dotfiles"
   },

@@ -146,7 +146,7 @@ function Profile(props: ProfileProps) {
     return <Wrapper>🚚 로딩 중......</Wrapper>;
   }
   if (error) {
-    return <Wrapper>❓프로필 데이터에 오류가 있습니다 {error} </Wrapper>;
+    return <Wrapper>❓프로필 데이터에 오류가 있습니다 {error}</Wrapper>;
   }
 
   return (
