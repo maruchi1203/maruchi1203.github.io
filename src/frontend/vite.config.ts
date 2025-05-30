@@ -8,8 +8,8 @@ export default defineConfig({
   plugins: [react()],
   root: path.resolve(__dirname),
   build: {
-    outDir: path.resolve(__dirname, "dist"),
-    emptyOutDir: true,
+    outDir: path.resolve(__dirname, "../backend/dist"),
+    emptyOutDir: false,
   },
   resolve: {
     alias: {
