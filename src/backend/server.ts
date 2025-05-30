@@ -42,7 +42,10 @@ app.get(
       });
 
       const data = await response.json();
-      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://maruchi1203.github.io"
+      );
       res.json(data);
     } catch (err: unknown) {
       res.status(500).json({ error: `Github API 호출 실패 ${err}` });
@@ -74,7 +77,10 @@ app.get(
       );
 
       const data = await response.json();
-      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.setHeader(
+        "Access-Control-Allow-Origin",
+        "https://maruchi1203.github.io"
+      );
       res.json(data);
     } catch (err: unknown) {
       res.status(500).json({ error: `Github API 호출 실패 ${err}` });
