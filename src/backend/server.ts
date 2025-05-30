@@ -9,9 +9,9 @@ const PORT = process.env.PORT || 4000;
 app.use(
   cors({
     origin: [
-      "https://maruchi1203.onrender.com/",
-      "http://localhost:4173/",
-      "http://localhost:5173/",
+      "https://maruchi1203.onrender.com",
+      "http://localhost:4173",
+      "http://localhost:5173",
     ], // 정확하게 GitHub Pages 도메인만 허용
     credentials: false,
   })
