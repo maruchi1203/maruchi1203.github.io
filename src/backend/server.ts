@@ -8,11 +8,17 @@ const PORT = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: "https://maruchi1203.github.io", // 정확하게 GitHub Pages 도메인만 허용
+    origin: [
+      "https://maruchi1203.github.io",
+      "http://localhost:4173/",
+      "http://localhost:5173/",
+    ], // 정확하게 GitHub Pages 도메인만 허용
     credentials: false,
   })
 );
+
 app.use(express.static(distPath));
+
 app.use((req: express.Request, res: express.Response, next: NextFunction) => {
   if (req.path.startsWith("http")) {
     res.status(400).send("비정상 경로 요청입니다.");
@@ -42,10 +48,6 @@ app.get(
       });
 
       const data = await response.json();
-      res.setHeader(
-        "Access-Control-Allow-Origin",
-        "https://maruchi1203.github.io"
-      );
       res.json(data);
     } catch (err: unknown) {
       res.status(500).json({ error: `Github API 호출 실패 ${err}` });
@@ -77,10 +79,6 @@ app.get(
       );
 
       const data = await response.json();
-      res.setHeader(
-        "Access-Control-Allow-Origin",
-        "https://maruchi1203.github.io"
-      );
       res.json(data);
     } catch (err: unknown) {
       res.status(500).json({ error: `Github API 호출 실패 ${err}` });
@@ -100,10 +98,6 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
     const response = await fetch(`https://v2.velog.io/rss/${name}`);
 
     const data = await response.text();
-    res.setHeader(
-      "Access-Control-Allow-Origin",
-      "https://maruchi1203.github.io"
-    );
     res.json(data);
   } catch (err: unknown) {
     res.status(500).json({ error: `Velog API 호출 실패 ${err}` });
