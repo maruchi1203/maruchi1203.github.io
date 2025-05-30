@@ -3,10 +3,16 @@ import cors from "cors";
 import path from "path";
 
 const app = express();
+const distPath = path.resolve(__dirname, "../frontend/dist");
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
-app.use(express.static(path.join(__dirname, "../../dist")));
+app.use(
+  cors({
+    origin: "https://maruchi1203.github.io", // 정확하게 GitHub Pages 도메인만 허용
+    credentials: true,
+  })
+);
+app.use(express.static(distPath));
 app.use((req: express.Request, res: express.Response, next: NextFunction) => {
   if (req.path.startsWith("http")) {
     res.status(400).send("비정상 경로 요청입니다.");
@@ -96,7 +102,7 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
 });
 
 app.get("*", (_, res: express.Response) => {
-  res.sendFile(path.join(__dirname, "../../dist/index.html"));
+  res.sendFile(path.join(distPath, "index.html"));
 });
 
 app.listen(PORT, () => {
