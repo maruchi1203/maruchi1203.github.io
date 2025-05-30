@@ -5,7 +5,7 @@
   "type": "commonjs",
   "scripts": {
     "start": "node dist/server.js",
-    "build": "npm install && npm run build --prefix ../frontend && tsc"
+    "build": "npm install --prefix ../frontend && npm run build --prefix ../frontend && tsc"
   },
   "dependencies": {
     "@types/express": "^4.17.21",
