@@ -1,5 +1,10 @@
 {
   "compilerOptions": {
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "esModuleInterop": true,
+    "types": [],
+
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
     "target": "ES2020",
     "useDefineForClassFields": true,
@@ -23,11 +28,12 @@
     "noFallthroughCasesInSwitch": true,
     "noUncheckedSideEffectImports": true,
 
-    "baseUrl": "./",
+    "baseUrl": ".",
     "paths": {
       "@styles/*": ["./styles/*"],
       "@images/*": ["../../public/images/*"]
     }
   },
-  "include": ["src"]
+  "include": ["vite-env.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", "dist"]
 }

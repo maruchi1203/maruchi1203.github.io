@@ -8,49 +8,58 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.static(path.join(__dirname, "../../dist")));
 
-app.get("/github/:name/profile", async (req, res) => {
-  const { name } = req.params;
-  const token = process.env.GITHUB_TOKEN;
+app.get(
+  "/github/:name/profile",
+  async (req: express.Request, res: express.Response) => {
+    const { name } = req.params;
+    const token = process.env.GITHUB_TOKEN;
 
-  try {
-    const response = await fetch(`https://api.github.com/users/${name}`, {
-      headers: {
-        Authorization: `token ${token}`,
-        Accept: "application/vnd.github.v3+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    });
+    try {
+      const response = await fetch(`https://api.github.com/users/${name}`, {
+        headers: {
+          Authorization: `token ${token}`,
+          Accept: "application/vnd.github.v3+json",
+          "X-GitHub-Api-Version": "2022-11-28",
+        },
+      });
 
-    const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json(data);
-  } catch (err: unknown) {
-    res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+      const data = await response.json();
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.json(data);
+    } catch (err: unknown) {
+      res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+    }
   }
-});
+);
 
-app.get("/github/:name/repos", async (req, res) => {
-  const { name } = req.params;
-  const token = process.env.GITHUB_TOKEN;
+app.get(
+  "/github/:name/repos",
+  async (req: express.Request, res: express.Response) => {
+    const { name } = req.params;
+    const token = process.env.GITHUB_TOKEN;
 
-  try {
-    const response = await fetch(`https://api.github.com/users/${name}/repos`, {
-      headers: {
-        Authorization: `token ${token}`,
-        Accept: "application/vnd.github.v3+json",
-        "X-GitHub-Api-Version": "2022-11-28",
-      },
-    });
+    try {
+      const response = await fetch(
+        `https://api.github.com/users/${name}/repos`,
+        {
+          headers: {
+            Authorization: `token ${token}`,
+            Accept: "application/vnd.github.v3+json",
+            "X-GitHub-Api-Version": "2022-11-28",
+          },
+        }
+      );
 
-    const data = await response.json();
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.json(data);
-  } catch (err: unknown) {
-    res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+      const data = await response.json();
+      res.setHeader("Access-Control-Allow-Origin", "*");
+      res.json(data);
+    } catch (err: unknown) {
+      res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+    }
   }
-});
+);
 
-app.get("/velog/:name", async (req, res) => {
+app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   const { name } = req.params;
 
   try {
@@ -64,7 +73,7 @@ app.get("/velog/:name", async (req, res) => {
   }
 });
 
-app.get("*", (_, res) => {
+app.get("*", (_, res: express.Response) => {
   res.sendFile(path.join(__dirname, "../../dist/index.html"));
 });
 
