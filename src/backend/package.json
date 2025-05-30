@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "start": "node dist/server.js",
-    "dev": "ts-node-dev server.ts",
     "build": "tsc"
   },
   "dependencies": {
@@ -30,7 +29,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
-  "main": "index.js",
+  "main": "dist/server.js",
   "keywords": [],
   "author": "",
   "license": "ISC",
