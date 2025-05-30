@@ -10,7 +10,7 @@ app.use(express.static(path.join(__dirname, "../../dist")));
 
 app.get("/github/:name/profile", async (req, res) => {
   const { name } = req.params;
-  const token = process.env.VITE_GITHUB_TOKEN;
+  const token = process.env.GITHUB_TOKEN;
 
   try {
     const response = await fetch(`https://api.github.com/users/${name}`, {
@@ -31,7 +31,7 @@ app.get("/github/:name/profile", async (req, res) => {
 
 app.get("/github/:name/repos", async (req, res) => {
   const { name } = req.params;
-  const token = process.env.VITE_GITHUB_TOKEN;
+  const token = process.env.GITHUB_TOKEN;
 
   try {
     const response = await fetch(`https://api.github.com/users/${name}/repos`, {

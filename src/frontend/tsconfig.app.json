@@ -25,9 +25,8 @@
 
     "baseUrl": "./",
     "paths": {
-      "@src/*": ["src/*"],
-      "@styles/*": ["src/frontend/styles/*"],
-      "@images/*": ["src/images/*"]
+      "@styles/*": ["./styles/*"],
+      "@images/*": ["../../public/images/*"]
     }
   },
   "include": ["src"]

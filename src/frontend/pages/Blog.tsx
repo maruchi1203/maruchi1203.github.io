@@ -1,5 +1,5 @@
 import { styled, ThemeProvider } from "styled-components";
-import theme from "../styles/theme";
+import theme from "@styles/theme";
 import { useEffect, useState } from "react";
 import RepositoryContainer from "./components/RepositoryContainer.tsx";
 import Profile from "./components/Profile.tsx";
