@@ -2,28 +2,40 @@ import express, { NextFunction } from "express";
 import cors from "cors";
 import path from "path";
 
+console.log("📦 서버 시작됨");
+
 const app = express();
 const distPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 4000;
 
 const whitelist = [
   "https://maruchi1203.github.io",
-  "http://localhost:4173",
   "http://localhost:5173",
+  "http://localhost:4173",
 ];
 
 app.use(
   cors({
-    origin: whitelist,
+    origin: (origin, callback) => {
+      console.log("🛜 Origin : ", origin);
+      console.log("🧑‍💻 ENV : ", process.env.NODE_ENV);
+
+      if (origin && whitelist.includes(origin)) {
+        console.log("✅ CORS Allowed");
+        callback(null, true);
+      } else {
+        console.warn("💥 CORS Blocked");
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: false,
   })
 );
 
 app.use(express.static(distPath));
-
 app.use((req: express.Request, res: express.Response, next: NextFunction) => {
   if (req.path.startsWith("http")) {
-    res.status(400).send("비정상 경로 요청입니다.");
+    res.status(400).send("Not allowed request");
     return;
   }
   next();
@@ -43,7 +55,7 @@ app.get(
     try {
       const response = await fetch(`https://api.github.com/users/${name}`, {
         headers: {
-          Authorization: `token ${token}`,
+          Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github.v3+json",
           "X-GitHub-Api-Version": "2022-11-28",
         },
@@ -73,7 +85,7 @@ app.get(
         `https://api.github.com/users/${name}/repos`,
         {
           headers: {
-            Authorization: `token ${token}`,
+            Authorization: `Bearer ${token}`,
             Accept: "application/vnd.github.v3+json",
             "X-GitHub-Api-Version": "2022-11-28",
           },
@@ -99,8 +111,6 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   try {
     const response = await fetch(`https://v2.velog.io/rss/${name}`);
     const data = await response.text();
-
-    res.set("Access-Control-Allow-Origin", "https://maruchi1203.github.io");
 
     return res.type("text/xml").send(data);
   } catch (err: unknown) {

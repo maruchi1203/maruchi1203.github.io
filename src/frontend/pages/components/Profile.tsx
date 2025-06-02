@@ -120,7 +120,6 @@ function Profile(props: ProfileProps) {
         const repoUrl = `${
           import.meta.env.VITE_API_BASE_URL
         }/github/${githubName}/profile`;
-        console.log("Profile.tsx::=> ", repoUrl);
         const res = await fetch(repoUrl);
 
         if (!res.ok) {
@@ -128,6 +127,7 @@ function Profile(props: ProfileProps) {
         }
 
         const data = await res.json();
+        console.log("Profile.tsx::=> ", data);
         setProfile(data);
       } catch (err: unknown) {
         if (err instanceof Error) {

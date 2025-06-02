@@ -167,6 +167,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
           }
         }
 
+        console.log("RepositoryContainer.tsx::=> ", data);
         setRepos(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -211,7 +212,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   };
 
   if (loading) {
-    return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
+    return <Wrapper>🚚 로딩 중......</Wrapper>;
   }
   if (error) {
     return (

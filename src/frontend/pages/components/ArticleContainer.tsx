@@ -133,6 +133,7 @@ function ArticleContainer(props: ArticleContainerProps) {
           };
         });
 
+        console.log("ArticleContainer.tsx::=> ", articles);
         setArticles(articles);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -149,7 +150,7 @@ function ArticleContainer(props: ArticleContainerProps) {
   }, [velogName]);
 
   if (loading) {
-    return <Wrapper>💁‍♂️로딩 중......</Wrapper>;
+    return <Wrapper>🚚 로딩 중......</Wrapper>;
   }
   if (error) {
     return (
