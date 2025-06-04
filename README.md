@@ -3,7 +3,6 @@
 ![썸네일](https://github.com/user-attachments/assets/1fcf6130-e5c8-4cf0-9acc-b8d39cb8caef)
 
 ##개발 중인 프로젝트입니다
----
 
 ## 프로젝트 환경
 - 언어 : Typescript
