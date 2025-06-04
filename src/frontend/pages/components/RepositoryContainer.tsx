@@ -97,6 +97,8 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
     return `translate(-50%, -50%) translateX(${offsetPercent}%) scale(${scale})`;
   }};
 
+  transition: transform 1s ease;
+
   background-color: ${theme.lightColors.primary};
 
   box-shadow: 0 10px 10px ${theme.lightColors.secondary};
@@ -167,7 +169,6 @@ function RepositoryContainer(props: RepositoryContainerProps) {
           }
         }
 
-        console.log("RepositoryContainer.tsx::=> ", data);
         setRepos(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -212,7 +213,7 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   };
 
   if (loading) {
-    return <Wrapper>🚚 로딩 중......</Wrapper>;
+    return <Wrapper>🖥️ 서버 구동 중......</Wrapper>;
   }
   if (error) {
     return (

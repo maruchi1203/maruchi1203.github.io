@@ -19,6 +19,7 @@ interface ArticleContainerProps {
 const Wrapper = styled.div`
   ${theme.flex.flexCol}
   align-items: start;
+  justify-content: center;
   padding: 20px;
   gap: 20px;
 
@@ -27,6 +28,11 @@ const Wrapper = styled.div`
   border-radius: 5px;
 
   background-color: ${theme.lightColors.primary};
+
+  #icon-down {
+    width: max-content;
+    text-align: center;
+  }
 `;
 
 const ArtcTitleContainer = styled.div`
@@ -43,13 +49,19 @@ const ArtcTitleContainer = styled.div`
 `;
 
 const ArtcCardContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
+  ${theme.flex.flexRow}
+  flex-direction: row-reverse;
+  gap: 1rem;
   padding: 10px;
 
   width: 100%;
   height: fit-content;
+`;
+
+const ArtcCardColumn = styled.div`
+  ${theme.flex.flexCol}
+  flex: 1;
+  gap: 1rem;
 `;
 
 const ArtcCard = styled.div`
@@ -97,7 +109,12 @@ const ArtcCard = styled.div`
 function ArticleContainer(props: ArticleContainerProps) {
   const { velogName } = props;
 
-  const [articles, setArticles] = useState<Article[]>([]);
+  const colCount = 3;
+
+  const [articleDatas, setArticleDatas] = useState<Article[]>([]);
+  const [articleElems, setArticleElems] = useState<React.ReactNode[]>([]);
+  const [distributed, setDistributed] = useState<React.ReactNode[][]>([]);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -118,7 +135,7 @@ function ArticleContainer(props: ArticleContainerProps) {
         const xmlDoc = domParser.parseFromString(xmlText, "application/xml");
         const rawArtcs = Array.from(xmlDoc.querySelectorAll("item"));
 
-        const articles: Article[] = rawArtcs.map((item) => {
+        const rawArticleDatas: Article[] = rawArtcs.map((item) => {
           const descText = item.querySelector("description")?.textContent ?? "";
           const doc = domParser.parseFromString(descText, "text/html");
           const thumbnail = doc.querySelector("img")?.getAttribute("src") ?? "";
@@ -133,8 +150,18 @@ function ArticleContainer(props: ArticleContainerProps) {
           };
         });
 
-        console.log("ArticleContainer.tsx::=> ", articles);
-        setArticles(articles);
+        const rawArticleElems = rawArticleDatas.map((artcData) => (
+          <ArtcCard key={artcData.guid}>
+            <a href={artcData.link}>
+              <span className="title">{artcData.title}</span>
+              <span className="date">{artcData.pubDate.toDateString()}</span>
+              <img className="artc-img" src={artcData.thumbnail} width="100%" />
+            </a>
+          </ArtcCard>
+        ));
+
+        setArticleDatas(rawArticleDatas);
+        setArticleElems(rawArticleElems);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -149,8 +176,36 @@ function ArticleContainer(props: ArticleContainerProps) {
     fetchRepos();
   }, [velogName]);
 
+  useEffect(() => {
+    const imgElem = document.getElementsByClassName(
+      "artc-img"
+    ) as HTMLCollectionOf<HTMLImageElement>;
+
+    const loadImages = Array.from(imgElem).map(
+      (value) =>
+        new Promise((resolve) => {
+          if (value.complete) resolve(true);
+          else value.onload = () => resolve(false);
+        })
+    );
+
+    Promise.all(loadImages).then(() => {
+      const distributed: React.ReactNode[][] = Array.from(
+        { length: colCount },
+        () => []
+      );
+      articleElems.forEach((artc) => {
+        const shortest = distributed.reduce((a, b) =>
+          a.length < b.length ? a : b
+        );
+        shortest.push(artc);
+      });
+      setDistributed(distributed);
+    });
+  }, [articleElems]);
+
   if (loading) {
-    return <Wrapper>🚚 로딩 중......</Wrapper>;
+    return <Wrapper>🖥️ 서버 구동 중......</Wrapper>;
   }
   if (error) {
     return (
@@ -173,14 +228,10 @@ function ArticleContainer(props: ArticleContainerProps) {
         Velog 글 목록
       </ArtcTitleContainer>
       <ArtcCardContainer>
-        {articles.map((article) => (
-          <ArtcCard key={article.guid}>
-            <a href={article.link}>
-              <span className="title">{article.title}</span>
-              <span className="date">{article.pubDate.toDateString()}</span>
-              <img src={article.thumbnail} width="100%" />
-            </a>
-          </ArtcCard>
+        {distributed.map((column, colIdx) => (
+          <ArtcCardColumn key={colIdx}>
+            {column.map((artc) => artc)}
+          </ArtcCardColumn>
         ))}
       </ArtcCardContainer>
     </Wrapper>

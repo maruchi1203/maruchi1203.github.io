@@ -143,6 +143,10 @@ function Blog() {
                 src={`${import.meta.env.BASE_URL}images/github.png`}
                 draggable="false"
               />
+              <HeaderImageItem
+                src={`${import.meta.env.BASE_URL}images/render.png`}
+                draggable="false"
+              />
             </HeaderMenu>
           </HeaderContainer>
           <BodyContainer>

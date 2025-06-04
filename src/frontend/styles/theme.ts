@@ -2,7 +2,7 @@ const darkThemeToggle = false;
 
 const lightColors = {
   primary: "white",
-  secondary: "#CCCCCC",
+  secondary: "#BBBBBB",
   background: "#F0F0F0",
   text: "#444444",
 };
@@ -49,7 +49,7 @@ const flex = {
   `,
 };
 
-const gap = "gap: 20px;";
+const gap = "gap: 1rem;";
 
 const theme = {
   darkThemeToggle,

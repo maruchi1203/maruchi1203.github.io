@@ -42,7 +42,9 @@ const Avatar = styled.img`
 
 const ContextContainer = styled.span`
   ${theme.flex.flexCol}
+  align-items: start;
   justify-content: center;
+  gap: 5px;
 
   width: 100%;
 
@@ -127,7 +129,6 @@ function Profile(props: ProfileProps) {
         }
 
         const data = await res.json();
-        console.log("Profile.tsx::=> ", data);
         setProfile(data);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -144,7 +145,7 @@ function Profile(props: ProfileProps) {
   }, [githubName]);
 
   if (loading) {
-    return <Wrapper>🚚 로딩 중......</Wrapper>;
+    return <Wrapper>🖥️ 서버 구동 중......</Wrapper>;
   }
   if (error) {
     return <Wrapper>❓프로필 데이터에 오류가 있습니다 {error}</Wrapper>;
