@@ -4,10 +4,7 @@ import { Blog, Portfolio } from "./pages";
 import reset from "styled-reset";
 
 const Wrapper = styled.div`
-  height: auto;
-  display: flex;
-  background-color: black;
-  justify-content: center;
+  height: 100%;
 `;
 
 const GlobalStyles = createGlobalStyle`

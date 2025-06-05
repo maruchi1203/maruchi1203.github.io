@@ -1,18 +1,4 @@
-const darkThemeToggle = false;
-
-const lightColors = {
-  primary: "white",
-  secondary: "#BBBBBB",
-  background: "#F0F0F0",
-  text: "#444444",
-};
-
-const darkColors = {
-  primary: "#313437",
-  secondary: "#6F7D7B",
-  background: "#1D2C2C",
-  text: "#9FA6A1",
-};
+import type { DefaultTheme } from "styled-components/dist/types";
 
 const fontSize = {
   small: "0.875rem",
@@ -51,10 +37,11 @@ const flex = {
 
 const gap = "gap: 1rem;";
 
-const theme = {
-  darkThemeToggle,
-  lightColors,
-  darkColors,
+export const lightTheme: DefaultTheme = {
+  primary: "white",
+  secondary: "#BBBBBB",
+  background: "#F0F0F0",
+  text: "#444444",
   fontSize,
   spacing,
   breakpoints,
@@ -62,4 +49,14 @@ const theme = {
   gap,
 };
 
-export default theme;
+export const darkTheme: DefaultTheme = {
+  primary: "#222222",
+  secondary: "#AAAAAA",
+  background: "#111111",
+  text: "#EEEEEE",
+  fontSize,
+  spacing,
+  breakpoints,
+  flex,
+  gap,
+};

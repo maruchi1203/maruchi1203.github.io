@@ -1,4 +1,3 @@
-import theme from "@styles/theme";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -20,16 +19,16 @@ interface ProfileProps {
 }
 
 const Wrapper = styled.div`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   gap: 10px;
   padding: 20px;
 
-  background-color: ${theme.lightColors.primary};
+  background-color: ${(props) => props.theme.primary};
   border-radius: 5px;
 `;
 
 const BasicInfoContainer = styled.div`
-  ${theme.flex.flexRow}
+  ${(props) => props.theme.flex.flexRow}
   flex-basis: max-content;
   padding: 10px;
 `;
@@ -41,7 +40,7 @@ const Avatar = styled.img`
 `;
 
 const ContextContainer = styled.span`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   align-items: start;
   justify-content: center;
   gap: 5px;
@@ -67,7 +66,7 @@ const ContextContainer = styled.span`
     font-size: medium;
     font-weight: bold;
 
-    color: ${theme.lightColors.secondary};
+    color: ${(props) => props.theme.secondary};
   }
 
   .bio {
@@ -76,7 +75,7 @@ const ContextContainer = styled.span`
     font-size: medium;
     font-weight: bold;
 
-    color: ${theme.lightColors.secondary};
+    color: ${(props) => props.theme.secondary};
   }
 `;
 
@@ -97,7 +96,7 @@ const LinkButton = styled.a`
 
   width: 100%;
 
-  color: ${theme.lightColors.text};
+  color: ${(props) => props.theme.text};
 
   :hover {
     color: white;

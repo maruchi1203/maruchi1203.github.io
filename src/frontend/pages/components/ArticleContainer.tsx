@@ -1,4 +1,3 @@
-import theme from "@styles/theme";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 
@@ -17,7 +16,7 @@ interface ArticleContainerProps {
 }
 
 const Wrapper = styled.div`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   align-items: start;
   justify-content: center;
   padding: 20px;
@@ -27,7 +26,7 @@ const Wrapper = styled.div`
 
   border-radius: 5px;
 
-  background-color: ${theme.lightColors.primary};
+  background-color: ${(props) => props.theme.primary};
 
   #icon-down {
     width: max-content;
@@ -36,7 +35,7 @@ const Wrapper = styled.div`
 `;
 
 const ArtcTitleContainer = styled.div`
-  ${theme.flex.flexRow}
+  ${(props) => props.theme.flex.flexRow}
   align-items: center;
   font-size: larger;
 
@@ -49,7 +48,7 @@ const ArtcTitleContainer = styled.div`
 `;
 
 const ArtcCardContainer = styled.div`
-  ${theme.flex.flexRow}
+  ${(props) => props.theme.flex.flexRow}
   flex-direction: row-reverse;
   gap: 1rem;
   padding: 10px;
@@ -59,28 +58,28 @@ const ArtcCardContainer = styled.div`
 `;
 
 const ArtcCardColumn = styled.div`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   flex: 1;
   gap: 1rem;
 `;
 
 const ArtcCard = styled.div`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   align-items: start;
 
   width: auto;
   height: fit-content;
 
-  background-color: ${theme.lightColors.primary};
+  background-color: ${(props) => props.theme.primary};
 
-  box-shadow: 0 10px 10px ${theme.lightColors.secondary};
+  box-shadow: 0 8px 6px ${(props) => props.theme.secondary};
 
   :hover {
     cursor: pointer;
   }
 
   a {
-    ${theme.flex.flexCol}
+    ${(props) => props.theme.flex.flexCol}
     align-items: start;
     padding: 20px;
     gap: 20px;
@@ -99,7 +98,7 @@ const ArtcCard = styled.div`
   }
 
   .date {
-    color: ${theme.lightColors.secondary};
+    color: ${(props) => props.theme.secondary};
   }
 `;
 
@@ -111,7 +110,7 @@ function ArticleContainer(props: ArticleContainerProps) {
 
   const colCount = 3;
 
-  const [articleDatas, setArticleDatas] = useState<Article[]>([]);
+  // const [articleDatas, setArticleDatas] = useState<Article[]>([]);
   const [articleElems, setArticleElems] = useState<React.ReactNode[]>([]);
   const [distributed, setDistributed] = useState<React.ReactNode[][]>([]);
 
@@ -160,7 +159,7 @@ function ArticleContainer(props: ArticleContainerProps) {
           </ArtcCard>
         ));
 
-        setArticleDatas(rawArticleDatas);
+        // setArticleDatas(rawArticleDatas);
         setArticleElems(rawArticleElems);
       } catch (err: unknown) {
         if (err instanceof Error) {

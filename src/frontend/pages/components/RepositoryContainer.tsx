@@ -1,4 +1,3 @@
-import theme from "@styles/theme";
 import { useEffect, useRef, useState } from "react";
 import styled from "styled-components";
 import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/react/24/outline";
@@ -19,7 +18,7 @@ interface RepositoryContainerProps {
 }
 
 const Wrapper = styled.div`
-  ${theme.flex.flexCol}
+  ${(props) => props.theme.flex.flexCol}
   align-items: start;
   padding: 20px;
   gap: 20px;
@@ -28,17 +27,17 @@ const Wrapper = styled.div`
 
   border-radius: 5px;
 
-  background-color: ${theme.lightColors.primary};
+  background-color: ${(props) => props.theme.primary};
 
   #repo {
-    ${theme.flex.flexRow}
+    ${(props) => props.theme.flex.flexRow}
     width: 100%;
     align-items: center;
   }
 `;
 
 const RepoTitleContainer = styled.div`
-  ${theme.flex.flexRow}
+  ${(props) => props.theme.flex.flexRow}
   align-items: center;
   font-size: larger;
 
@@ -52,7 +51,7 @@ const RepoTitleContainer = styled.div`
 
 const RepoCardContainer = styled.div`
   flex-grow: 1;
-  ${theme.flex.flexRow}
+  ${(props) => props.theme.flex.flexRow}
   position: relative;
   display: inline-block;
 
@@ -99,12 +98,12 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
 
   transition: transform 1s ease;
 
-  background-color: ${theme.lightColors.primary};
+  background-color: ${(props) => props.theme.primary};
 
-  box-shadow: 0 10px 10px ${theme.lightColors.secondary};
+  box-shadow: 0 8px 6px ${(props) => props.theme.secondary};
 
   a {
-    ${theme.flex.flexCol}
+    ${(props) => props.theme.flex.flexCol}
     align-items: start;
     padding: 20px;
 
@@ -123,7 +122,7 @@ const RepoCard = styled.div<{ $renderedindex: number }>`
   }
 
   .description {
-    color: ${theme.lightColors.secondary};
+    color: ${(props) => props.theme.secondary};
   }
 `;
 
