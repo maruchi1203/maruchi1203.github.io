@@ -1,0 +1,11 @@
+﻿services:
+  web:
+    build: .
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+    env_file:
+      - ./src/backend/.env
+      - ./src/frontend/.env
+    environment:
+      - PORT=4000

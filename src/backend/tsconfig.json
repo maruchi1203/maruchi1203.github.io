@@ -6,7 +6,6 @@
     "rootDir": "./",
     "esModuleInterop": true,
     "strict": true,
-    "moduleResolution": "Node",
     "resolveJsonModule": true,
     "types": ["node"],
     "forceConsistentCasingInFileNames": true

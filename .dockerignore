@@ -1,0 +1,10 @@
+node_modules
+dist
+dist-ssr
+.git
+.github
+.vscode
+src/frontend/node_modules
+src/backend/dist
+*.log
+*.env*

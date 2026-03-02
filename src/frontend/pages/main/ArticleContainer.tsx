@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import styled from "styled-components";
+﻿import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
 
 interface Article {
   guid: string;
@@ -15,114 +15,29 @@ interface ArticleContainerProps {
   [key: string]: unknown;
 }
 
-const Wrapper = styled.div`
-  ${(props) => props.theme.flex.flexCol}
-  align-items: start;
-  justify-content: center;
-  padding: 20px;
-  gap: 20px;
+const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
-  width: 100%;
-
-  border-radius: 5px;
-
-  background-color: ${(props) => props.theme.primary};
-
-  #icon-down {
-    width: max-content;
-    text-align: center;
-  }
-`;
-
-const ArtcTitleContainer = styled.div`
-  ${(props) => props.theme.flex.flexRow}
-  align-items: center;
-  font-size: larger;
-
-  gap: 10px;
-
-  .logo {
-    width: 36px;
-    height: auto;
-  }
-`;
-
-const ArtcCardContainer = styled.div`
-  ${(props) => props.theme.flex.flexRow}
-  flex-direction: row-reverse;
-  gap: 1rem;
-  padding: 10px;
-
-  width: 100%;
-  height: fit-content;
-`;
-
-const ArtcCardColumn = styled.div`
-  ${(props) => props.theme.flex.flexCol}
-  flex: 1;
-  gap: 1rem;
-`;
-
-const ArtcCard = styled.div`
-  ${(props) => props.theme.flex.flexCol}
-  align-items: start;
-
-  width: auto;
-  height: fit-content;
-
-  background-color: ${(props) => props.theme.primary};
-
-  box-shadow: 0 8px 6px ${(props) => props.theme.secondary};
-
-  :hover {
-    cursor: pointer;
-  }
-
-  a {
-    ${(props) => props.theme.flex.flexCol}
-    align-items: start;
-    padding: 20px;
-    gap: 20px;
-
-    width: 100%;
-    height: 100%;
-  }
-
-  span {
-    display: block;
-    width: 100%;
-  }
-
-  .title {
-    font-size: large;
-  }
-
-  .date {
-    color: ${(props) => props.theme.secondary};
-  }
-`;
-
-/**
- * 리포지토리
- */
 function ArticleContainer(props: ArticleContainerProps) {
   const { velogName } = props;
 
   const colCount = 3;
 
-  // const [articleDatas, setArticleDatas] = useState<Article[]>([]);
-  const [articleElems, setArticleElems] = useState<React.ReactNode[]>([]);
-  const [distributed, setDistributed] = useState<React.ReactNode[][]>([]);
+  const [articleElems, setArticleElems] = useState<ReactNode[]>([]);
+  const [distributed, setDistributed] = useState<ReactNode[][]>([]);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchRepos = async () => {
+      if (!velogName) {
+        setError("NEXT_PUBLIC_VELOG_NAME is not set.");
+        setLoading(false);
+        return;
+      }
+
       try {
-        const res = await fetch(
-          `${import.meta.env.VITE_API_BASE_URL}/velog/${velogName}`
-        );
+        const res = await fetch(`${apiBase}/velog/${velogName}`);
 
         if (!res.ok) {
           throw new Error(`Error: ${res.status}`);
@@ -150,16 +65,20 @@ function ArticleContainer(props: ArticleContainerProps) {
         });
 
         const rawArticleElems = rawArticleDatas.map((artcData) => (
-          <ArtcCard key={artcData.guid}>
-            <a href={artcData.link}>
-              <span className="title">{artcData.title}</span>
-              <span className="date">{artcData.pubDate.toDateString()}</span>
+          <div
+            key={artcData.guid}
+            className="rounded-md bg-white p-5 shadow-lg transition hover:cursor-pointer dark:bg-neutral-900"
+          >
+            <a href={artcData.link} className="flex flex-col gap-5">
+              <span className="text-lg">{artcData.title}</span>
+              <span className="text-neutral-500 dark:text-neutral-400">
+                {artcData.pubDate.toDateString()}
+              </span>
               <img className="artc-img" src={artcData.thumbnail} width="100%" />
             </a>
-          </ArtcCard>
+          </div>
         ));
 
-        // setArticleDatas(rawArticleDatas);
         setArticleElems(rawArticleElems);
       } catch (err: unknown) {
         if (err instanceof Error) {
@@ -189,9 +108,9 @@ function ArticleContainer(props: ArticleContainerProps) {
     );
 
     Promise.all(loadImages).then(() => {
-      const distributed: React.ReactNode[][] = Array.from(
+      const distributed: ReactNode[][] = Array.from(
         { length: colCount },
-        () => []
+        () => [],
       );
       articleElems.forEach((artc) => {
         const shortest = distributed.reduce((a, b) =>
@@ -204,36 +123,36 @@ function ArticleContainer(props: ArticleContainerProps) {
   }, [articleElems]);
 
   if (loading) {
-    return <Wrapper>🖥️ 서버 구동 중......</Wrapper>;
+    return (
+      <div className="rounded-md bg-white p-5 shadow-sm dark:bg-neutral-900">
+        Loading articles...
+      </div>
+    );
   }
   if (error) {
     return (
-      <Wrapper>
-        ❓죄송합니다. 해당 리포지토리를 찾을 수 없습니다. {error}
-      </Wrapper>
+      <div className="rounded-md bg-white p-5 shadow-sm dark:bg-neutral-900">
+        Article error: {error}
+      </div>
     );
   }
 
   return (
-    <Wrapper>
-      <ArtcTitleContainer>
-        <div className="logo">
-          <img
-            src={`${import.meta.env.BASE_URL}images/velog.png`}
-            width="100%"
-            height="auto"
-          />
+    <div className="rounded-md bg-white p-5 shadow-sm dark:bg-neutral-900">
+      <div className="flex items-center gap-3 text-lg">
+        <div className="h-9 w-9">
+          <img src="/images/velog.png" className="h-full w-full" />
         </div>
-        Velog 글 목록
-      </ArtcTitleContainer>
-      <ArtcCardContainer>
+        Velog Article List
+      </div>
+      <div className="mt-4 flex flex-row-reverse gap-4">
         {distributed.map((column, colIdx) => (
-          <ArtcCardColumn key={colIdx}>
+          <div key={colIdx} className="flex flex-1 flex-col gap-4">
             {column.map((artc) => artc)}
-          </ArtcCardColumn>
+          </div>
         ))}
-      </ArtcCardContainer>
-    </Wrapper>
+      </div>
+    </div>
   );
 }
 

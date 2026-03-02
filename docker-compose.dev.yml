@@ -1,0 +1,64 @@
+﻿services:
+  web-dev:
+    profiles: ["dev"]
+    build:
+      context: .
+      target: deps
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+    env_file:
+      - ./src/backend/.env
+      - ./src/frontend/.env
+    environment:
+      - PORT=4000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/src/frontend/.next
+      - /app/src/backend/dist
+
+  web-dev-watch:
+    profiles: ["watch"]
+    build:
+      context: .
+      target: deps
+    working_dir: /app
+    command: npm run dev
+    ports:
+      - "4000:4000"
+      - "3000:3000"
+    env_file:
+      - ./src/backend/.env
+      - ./src/frontend/.env
+    environment:
+      - PORT=4000
+    volumes:
+      - .:/app
+      - /app/node_modules
+      - /app/src/frontend/.next
+      - /app/src/backend/dist
+    develop:
+      watch:
+        - action: sync
+          path: ./src/frontend
+          target: /app/src/frontend
+          ignore:
+            - node_modules/
+            - .next/
+        - action: sync
+          path: ./src/backend
+          target: /app/src/backend
+          ignore:
+            - node_modules/
+            - dist/
+        - action: rebuild
+          path: ./package.json
+        - action: rebuild
+          path: ./package-lock.json
+        - action: rebuild
+          path: ./src/frontend/package.json
+        - action: rebuild
+          path: ./src/backend/package.json

@@ -1,38 +1,40 @@
-import express, { NextFunction } from "express";
+﻿import express, { NextFunction } from "express";
 import cors from "cors";
 import path from "path";
+import dotenv from "dotenv";
 
-console.log("📦 서버 시작됨");
+dotenv.config({ path: path.resolve(process.cwd(), ".env") });
+
+console.log("Server starting...");
 
 const app = express();
-const distPath = path.resolve(__dirname);
 const PORT = process.env.PORT || 4000;
 
 const whitelist = [
   "https://maruchi1203.github.io",
-  "http://localhost:5173",
-  "http://localhost:4173",
+  "http://localhost:3000",
+  "http://localhost:4000",
 ];
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      console.log("🛜 Origin : ", origin);
-      console.log("🧑‍💻 ENV : ", process.env.NODE_ENV);
+      console.log("Origin:", origin);
+      console.log("NODE_ENV:", process.env.NODE_ENV);
 
-      if (origin && whitelist.includes(origin)) {
-        console.log("✅ CORS Allowed");
+      const isAllowed = !origin || whitelist.includes(origin);
+      if (isAllowed) {
+        console.log("CORS allowed");
         callback(null, true);
       } else {
-        console.warn("💥 CORS Blocked");
+        console.warn("CORS blocked");
         callback(new Error("Not allowed by CORS"));
       }
     },
     credentials: false,
-  })
+  }),
 );
 
-app.use(express.static(distPath));
 app.use((req: express.Request, res: express.Response, next: NextFunction) => {
   if (req.path.startsWith("http")) {
     res.status(400).send("Not allowed request");
@@ -48,12 +50,13 @@ app.get(
     const token = process.env.GITHUB_TOKEN;
 
     if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
-      res.status(400).json({ error: "github name 파라미터가 필요합니다." });
+      res.status(400).json({ error: "github name parameter is required" });
       return;
     }
 
     try {
-      const response = await fetch(`https://api.github.com/users/${name}`, {
+      const response = await fetch(`https://api.github.com/users/${name}`,
+      {
         headers: {
           Authorization: `Bearer ${token}`,
           Accept: "application/vnd.github.v3+json",
@@ -64,9 +67,9 @@ app.get(
       const data = await response.json();
       res.json(data);
     } catch (err: unknown) {
-      res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+      res.status(500).json({ error: `Github API request failed: ${err}` });
     }
-  }
+  },
 );
 
 app.get(
@@ -76,7 +79,7 @@ app.get(
     const token = process.env.GITHUB_TOKEN;
 
     if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
-      res.status(400).json({ error: "github name 파라미터가 필요합니다." });
+      res.status(400).json({ error: "github name parameter is required" });
       return;
     }
 
@@ -89,22 +92,22 @@ app.get(
             Accept: "application/vnd.github.v3+json",
             "X-GitHub-Api-Version": "2022-11-28",
           },
-        }
+        },
       );
 
       const data = await response.json();
       res.json(data);
     } catch (err: unknown) {
-      res.status(500).json({ error: `Github API 호출 실패 ${err}` });
+      res.status(500).json({ error: `Github API request failed: ${err}` });
     }
-  }
+  },
 );
 
 app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
   const { name } = req.params;
 
   if (!name || !/^[a-zA-Z0-9-_]+$/.test(name)) {
-    res.status(400).json({ error: "velog name 파라미터가 필요합니다." });
+    res.status(400).json({ error: "velog name parameter is required" });
     return;
   }
 
@@ -114,14 +117,16 @@ app.get("/velog/:name", async (req: express.Request, res: express.Response) => {
 
     return res.type("text/xml").send(data);
   } catch (err: unknown) {
-    res.status(500).json({ error: `Velog API 호출 실패 ${err}` });
+    res.status(500).json({ error: `Velog API request failed: ${err}` });
   }
 });
 
-app.get("*", (_, res: express.Response) => {
-  res.sendFile(path.join(distPath, "index.html"));
+app.use((req: express.Request, res: express.Response) => {
+  res.status(404).json({ error: `Route not found: ${req.method} ${req.path}` });
 });
 
 app.listen(PORT, () => {
   console.log(`Server running on ${PORT}`);
 });
+
+
