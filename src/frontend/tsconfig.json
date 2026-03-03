@@ -15,8 +15,7 @@
     "incremental": true,
     "types": ["node"],
     "baseUrl": ".",
-    "plugins": [{ "name": "next" }],
-    "ignoreDeprecations": "6.0"
+    "plugins": [{ "name": "next" }]
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"],
   "exclude": ["node_modules"]
