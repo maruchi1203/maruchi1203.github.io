@@ -10,8 +10,12 @@ export function GotoInfo(props: GotoInfoProps) {
     <div key={props.name}>
       <img src={props.imgUrl} className="h-6 w-6" />
       <a className="hover:text-white" href={props.linkUrl}>
-        {props.linkUrl}
+        {props.linkText}
       </a>
     </div>
   );
+}
+
+export default function GotoInfoPage() {
+  return null;
 }
