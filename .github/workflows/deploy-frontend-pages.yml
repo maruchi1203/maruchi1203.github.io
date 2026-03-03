@@ -36,13 +36,10 @@ jobs:
         with:
           node-version: "22"
           cache: "npm"
-          cache-dependency-path: |
-            package-lock.json
-            src/frontend/package-lock.json
+          cache-dependency-path: src/frontend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci --workspace src/frontend
-        working-directory: .
+        run: npm ci
 
       - name: Build static site
         run: npm run build
