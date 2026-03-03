@@ -10,6 +10,6 @@
     "types": ["node"],
     "forceConsistentCasingInFileNames": true
   },
-  "include": ["server.ts"],
+  "include": ["**/*.ts"],
   "exclude": ["**/*.test.ts", "frontend", "src/frontend", "dist"]
 }
