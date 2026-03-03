@@ -4,9 +4,8 @@ import HomeSection from "./main/HomeSection";
 import Menu from "./nav/Menu";
 
 export default function Index() {
-  const pages = [<HomeSection />];
-
-  const [pageSelection, setPageSelection] = useState(0);
+  const pages = [<HomeSection key="home" />];
+  const pageSelection = 0;
 
   const [loading, setLoading] = useState(true);
   const [isDarkTheme, setDarkTheme] = useState(false);
