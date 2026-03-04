@@ -1,4 +1,4 @@
-import MenuListItem from "./container/MenuListItem";
+import MenuListItem from "./item/MenuListItem";
 
 export default function NavMenuSection() {
   const menus = [

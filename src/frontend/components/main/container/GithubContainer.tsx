@@ -128,19 +128,19 @@ function GithubContainer(props: RepositoryContainerProps) {
   return (
     <div className="rounded-md bg-white p-5 shadow-sm dark:bg-neutral-900">
       <div className="flex items-center gap-3 text-lg">
-        <div className="h-1 w-1">
+        <div className="h-9 w-9">
           <img src="/images/github.png" className="h-full w-full" />
         </div>
         GitHub Repository List
       </div>
       <div className="mt-4 flex items-center">
         <button
-          className={leftIconVisibility ? "visible" : "invisible"}
+          className={`${leftIconVisibility ? "visible" : "invisible"} z-20`}
           onClick={leftIconOnClick}
         >
           <ChevronLeftIcon className="h-10 w-10 md:h-16 md:w-16" />
         </button>
-        <div className="z-0 relative mx-2 h-[360px] flex-1 md:h-[400px]">
+        <div className="relative mx-2 h-[360px] flex-1 md:h-[400px]">
           {repos.map((repo, index) => (
             <div
               key={repo.id}
@@ -149,9 +149,9 @@ function GithubContainer(props: RepositoryContainerProps) {
               }`}
               style={{
                 transform: `translate(-50%, -50%) translateX(${
-                  (index - selectedRepo) * 15
+                  (index - selectedRepo) * 10
                 }%) scale(${1 - 0.1 * Math.abs(index - selectedRepo)})`,
-                zIndex: 100 - Math.abs(index - selectedRepo),
+                zIndex: 10 - Math.abs(index - selectedRepo),
               }}
             >
               <a href={repo.html_url} className="flex h-full flex-col">
@@ -167,7 +167,7 @@ function GithubContainer(props: RepositoryContainerProps) {
           ))}
         </div>
         <button
-          className={`${rightIconVisibility ? "visible" : "invisible"} z-1`}
+          className={`${rightIconVisibility ? "visible" : "invisible"} z-20`}
           onClick={rightIconOnClick}
         >
           <ChevronRightIcon className="z-1 h-10 w-10 md:h-16 md:w-16" />
