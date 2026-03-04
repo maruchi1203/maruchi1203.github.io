@@ -4,7 +4,7 @@ interface Article {
   guid: string;
   title: string;
   link: string;
-  pubDate: Date;
+  publishDate: Date;
   description: string;
   thumbnail: string;
 }
@@ -52,7 +52,9 @@ function VelogContainer(props: ArticleContainerProps) {
             guid: item.querySelector("guid")?.textContent ?? "",
             title: item.querySelector("title")?.textContent ?? "",
             link: item.querySelector("link")?.textContent ?? "",
-            pubDate: new Date(item.querySelector("pubDate")?.textContent ?? ""),
+            publishDate: new Date(
+              item.querySelector("pubDate")?.textContent ?? "",
+            ),
             description: item.querySelector("description")?.textContent ?? "",
             thumbnail,
           };
@@ -105,7 +107,7 @@ function VelogContainer(props: ArticleContainerProps) {
             <a href={artcData.link} className="flex flex-col gap-5">
               <span className="text-lg">{artcData.title}</span>
               <span className="text-neutral-500 dark:text-neutral-400">
-                {artcData.pubDate.toDateString()}
+                {artcData.publishDate.toDateString()}
               </span>
               <img className="w-full" src={artcData.thumbnail} />
             </a>
