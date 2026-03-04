@@ -1,6 +1,6 @@
 ﻿import { useEffect, useState } from "react";
 
-interface Profile {
+interface NavProfileSection {
   login: string;
   name: string;
   bio: string;
@@ -13,11 +13,11 @@ interface Profile {
 
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
-function Profile() {
+function NavProfileSection() {
   const githubName = process.env.NEXT_PUBLIC_GITHUB_USER_NAME ?? "";
   const velogName = process.env.NEXT_PUBLIC_VELOG_NAME ?? "";
 
-  const [profile, setProfile] = useState<Profile>();
+  const [profile, setProfile] = useState<NavProfileSection>();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -102,4 +102,4 @@ function Profile() {
   );
 }
 
-export default Profile;
+export default NavProfileSection;

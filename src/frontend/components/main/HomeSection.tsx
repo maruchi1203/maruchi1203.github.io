@@ -1,5 +1,5 @@
-import ArticleContainer from "./ArticleContainer";
-import RepositoryContainer from "./RepositoryContainer";
+import VelogContainer from "./container/VelogContainer";
+import GithubContainer from "./container/GithubContainer";
 
 export default function HomeSection() {
   const githubName = process.env.NEXT_PUBLIC_GITHUB_USER_NAME ?? "";
@@ -7,8 +7,8 @@ export default function HomeSection() {
 
   return (
     <section className="flex flex-1 flex-col gap-4">
-      <RepositoryContainer githubName={githubName} />
-      <ArticleContainer velogName={velogName} />
+      <GithubContainer githubName={githubName} />
+      <VelogContainer velogName={velogName} />
     </section>
   );
 }

@@ -1,5 +1,4 @@
 ﻿import { useEffect, useState } from "react";
-import type { ReactNode } from "react";
 
 interface Article {
   guid: string;
@@ -17,14 +16,10 @@ interface ArticleContainerProps {
 
 const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:4000";
 
-function ArticleContainer(props: ArticleContainerProps) {
+function VelogContainer(props: ArticleContainerProps) {
   const { velogName } = props;
 
-  const colCount = 3;
-
-  const [articleElems, setArticleElems] = useState<ReactNode[]>([]);
-  const [distributed, setDistributed] = useState<ReactNode[][]>([]);
-
+  const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,7 +39,6 @@ function ArticleContainer(props: ArticleContainerProps) {
         }
 
         const domParser = new DOMParser();
-
         const xmlText = await res.text();
         const xmlDoc = domParser.parseFromString(xmlText, "application/xml");
         const rawArtcs = Array.from(xmlDoc.querySelectorAll("item"));
@@ -60,26 +54,11 @@ function ArticleContainer(props: ArticleContainerProps) {
             link: item.querySelector("link")?.textContent ?? "",
             pubDate: new Date(item.querySelector("pubDate")?.textContent ?? ""),
             description: item.querySelector("description")?.textContent ?? "",
-            thumbnail: thumbnail,
+            thumbnail,
           };
         });
 
-        const rawArticleElems = rawArticleDatas.map((artcData) => (
-          <div
-            key={artcData.guid}
-            className="rounded-md bg-white p-5 shadow-lg transition hover:cursor-pointer dark:bg-neutral-900"
-          >
-            <a href={artcData.link} className="flex flex-col gap-5">
-              <span className="text-lg">{artcData.title}</span>
-              <span className="text-neutral-500 dark:text-neutral-400">
-                {artcData.pubDate.toDateString()}
-              </span>
-              <img className="artc-img" src={artcData.thumbnail} width="100%" />
-            </a>
-          </div>
-        ));
-
-        setArticleElems(rawArticleElems);
+        setArticles(rawArticleDatas);
       } catch (err: unknown) {
         if (err instanceof Error) {
           setError(err.message);
@@ -93,34 +72,6 @@ function ArticleContainer(props: ArticleContainerProps) {
 
     fetchRepos();
   }, [velogName]);
-
-  useEffect(() => {
-    const imgElem = document.getElementsByClassName(
-      "artc-img"
-    ) as HTMLCollectionOf<HTMLImageElement>;
-
-    const loadImages = Array.from(imgElem).map(
-      (value) =>
-        new Promise((resolve) => {
-          if (value.complete) resolve(true);
-          else value.onload = () => resolve(false);
-        })
-    );
-
-    Promise.all(loadImages).then(() => {
-      const distributed: ReactNode[][] = Array.from(
-        { length: colCount },
-        () => [],
-      );
-      articleElems.forEach((artc) => {
-        const shortest = distributed.reduce((a, b) =>
-          a.length < b.length ? a : b
-        );
-        shortest.push(artc);
-      });
-      setDistributed(distributed);
-    });
-  }, [articleElems]);
 
   if (loading) {
     return (
@@ -143,12 +94,21 @@ function ArticleContainer(props: ArticleContainerProps) {
         <div className="h-9 w-9">
           <img src="/images/velog.png" className="h-full w-full" />
         </div>
-        Velog Article List
+        Velog
       </div>
-      <div className="mt-4 flex flex-row-reverse gap-4">
-        {distributed.map((column, colIdx) => (
-          <div key={colIdx} className="flex flex-1 flex-col gap-4">
-            {column.map((artc) => artc)}
+      <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
+        {articles.map((artcData) => (
+          <div
+            key={artcData.guid}
+            className="rounded-md bg-white p-5 shadow-lg transition hover:cursor-pointer dark:bg-neutral-900"
+          >
+            <a href={artcData.link} className="flex flex-col gap-5">
+              <span className="text-lg">{artcData.title}</span>
+              <span className="text-neutral-500 dark:text-neutral-400">
+                {artcData.pubDate.toDateString()}
+              </span>
+              <img className="w-full" src={artcData.thumbnail} />
+            </a>
           </div>
         ))}
       </div>
@@ -156,4 +116,4 @@ function ArticleContainer(props: ArticleContainerProps) {
   );
 }
 
-export default ArticleContainer;
+export default VelogContainer;
