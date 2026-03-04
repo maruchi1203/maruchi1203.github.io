@@ -1,8 +1,8 @@
-﻿services:
-  web-dev:
-    profiles: ["dev"]
+services:
+  web:
     build:
       context: .
+      dockerfile: .dockerfile
       target: deps
     working_dir: /app
     command: npm run dev
@@ -14,27 +14,9 @@
       - ./src/frontend/.env
     environment:
       - PORT=4000
-    volumes:
-      - .:/app
-      - /app/node_modules
-      - /app/src/frontend/.next
-      - /app/src/backend/dist
-
-  web-dev-watch:
-    profiles: ["watch"]
-    build:
-      context: .
-      target: deps
-    working_dir: /app
-    command: npm run dev
-    ports:
-      - "4000:4000"
-      - "3000:3000"
-    env_file:
-      - ./src/backend/.env
-      - ./src/frontend/.env
-    environment:
-      - PORT=4000
+      - CHOKIDAR_USEPOLLING=true
+      - CHOKIDAR_INTERVAL=200
+      - WATCHPACK_POLLING=true
     volumes:
       - .:/app
       - /app/node_modules
@@ -48,6 +30,7 @@
           ignore:
             - node_modules/
             - .next/
+            - out/
         - action: sync
           path: ./src/backend
           target: /app/src/backend

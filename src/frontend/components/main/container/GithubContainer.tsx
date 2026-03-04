@@ -32,7 +32,7 @@ function isRepoArray(data: unknown): data is Repo[] {
   );
 }
 
-function RepositoryContainer(props: RepositoryContainerProps) {
+function GithubContainer(props: RepositoryContainerProps) {
   const { githubName } = props;
 
   const [leftIconVisibility, setLeftIconVisibility] = useState(false);
@@ -128,23 +128,23 @@ function RepositoryContainer(props: RepositoryContainerProps) {
   return (
     <div className="rounded-md bg-white p-5 shadow-sm dark:bg-neutral-900">
       <div className="flex items-center gap-3 text-lg">
-        <div className="h-9 w-9">
+        <div className="h-1 w-1">
           <img src="/images/github.png" className="h-full w-full" />
         </div>
         GitHub Repository List
       </div>
-      <div className="mt-4 flex items-center z-1">
+      <div className="mt-4 flex items-center">
         <button
           className={leftIconVisibility ? "visible" : "invisible"}
           onClick={leftIconOnClick}
         >
-          <ChevronLeftIcon className="h-16 w-16" />
+          <ChevronLeftIcon className="h-10 w-10 md:h-16 md:w-16" />
         </button>
-        <div className="relative mx-2 h-[400px] flex-1 z-0">
+        <div className="z-0 relative mx-2 h-[360px] flex-1 md:h-[400px]">
           {repos.map((repo, index) => (
             <div
               key={repo.id}
-              className={`absolute left-1/2 top-1/2 h-[350px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-5 shadow-lg transition-transform dark:bg-neutral-900 ${
+              className={`absolute left-1/2 top-1/2 h-[320px] w-[min(92vw,500px)] -translate-x-1/2 -translate-y-1/2 rounded-md bg-white p-5 shadow-lg transition-transform md:h-[350px] dark:bg-neutral-900 ${
                 Math.abs(index - selectedRepo) <= 2 ? "block" : "hidden"
               }`}
               style={{
@@ -170,11 +170,11 @@ function RepositoryContainer(props: RepositoryContainerProps) {
           className={`${rightIconVisibility ? "visible" : "invisible"} z-1`}
           onClick={rightIconOnClick}
         >
-          <ChevronRightIcon className="h-16 w-16 z-1" />
+          <ChevronRightIcon className="z-1 h-10 w-10 md:h-16 md:w-16" />
         </button>
       </div>
     </div>
   );
 }
 
-export default RepositoryContainer;
+export default GithubContainer;

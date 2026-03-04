@@ -5,7 +5,7 @@ interface GotoInfoProps {
   linkUrl: string;
 }
 
-export function GotoInfo(props: GotoInfoProps) {
+export default function GotoInfo(props: GotoInfoProps) {
   return (
     <div key={props.name}>
       <img src={props.imgUrl} className="h-6 w-6" />
@@ -14,8 +14,4 @@ export function GotoInfo(props: GotoInfoProps) {
       </a>
     </div>
   );
-}
-
-export default function GotoInfoPage() {
-  return null;
 }

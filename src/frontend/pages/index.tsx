@@ -1,7 +1,7 @@
-﻿import { useEffect, useState } from "react";
-import Profile from "./nav/Profile";
-import HomeSection from "./main/HomeSection";
-import Menu from "./nav/Menu";
+import { useEffect, useState } from "react";
+import NavProfileSection from "../components/nav/NavProfileSection";
+import HomeSection from "../components/main/HomeSection";
+import NavMenuSection from "../components/nav/NavMenuSection";
 
 export default function Index() {
   const pages = [<HomeSection key="home" />];
@@ -44,8 +44,8 @@ export default function Index() {
 
           <main className="flex flex-col gap-4 lg:flex-row">
             <aside className="flex w-full flex-col gap-4 lg:w-80">
-              <Profile />
-              <Menu />
+              <NavProfileSection />
+              <NavMenuSection />
             </aside>
             {pages[pageSelection]}
           </main>
@@ -63,3 +63,4 @@ export default function Index() {
     </div>
   );
 }
+

@@ -15,9 +15,11 @@
     "start": "concurrently -n backend,frontend \"npm run start -w src/backend\" \"npm run start -w src/frontend\"",
     "start:frontend": "npm run start -w src/frontend",
     "start:backend": "npm run start -w src/backend",
+    "preview:frontend": "npm run build:frontend && npm run start:frontend",
+    "preview:full": "npm run build:frontend && concurrently -n backend,frontend \"npm run start:backend\" \"npm run start:frontend\"",
     "lint": "npm run lint -ws",
     "docker:dev": "docker compose -f docker-compose.dev.yml up --build",
-    "docker:dev:watch": "docker compose -f docker-compose.dev.yml up --build && docker compose -f docker-compose.dev.yml watch",
+    "docker:dev:watch": "docker compose -f docker-compose.dev.yml up --build --watch",
     "docker:dev:down": "docker compose -f docker-compose.dev.yml down",
     "docker:prod": "docker compose -f docker-compose.yml up --build",
     "docker:prod:down": "docker compose -f docker-compose.yml down"

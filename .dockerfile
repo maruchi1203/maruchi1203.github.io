@@ -18,9 +18,9 @@ COPY --from=deps /app/node_modules ./node_modules
 COPY --from=build /app/package.json ./package.json
 COPY --from=build /app/src/backend/dist ./src/backend/dist
 COPY --from=build /app/src/backend/package.json ./src/backend/package.json
-COPY --from=build /app/src/frontend/.next ./src/frontend/.next
+COPY --from=build /app/src/frontend/out ./src/frontend/out
 COPY --from=build /app/src/frontend/public ./src/frontend/public
-COPY --from=build /app/src/frontend/next.config.js ./src/frontend/next.config.js
+COPY --from=build /app/src/frontend/scripts ./src/frontend/scripts
 COPY --from=build /app/src/frontend/package.json ./src/frontend/package.json
 EXPOSE 4000
 EXPOSE 3000
